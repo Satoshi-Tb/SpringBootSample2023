@@ -22,27 +22,29 @@ public class SignupForm {
 	//@NotEmpty   | NG  | NG     | OK
 	//@NotBlank    | NG  | NG     | NG
 	
-	@NotBlank
-	@Email
+	// groups属性にて、バリデーション順番を指定
+	
+	@NotBlank(groups = ValidGroup1.class)
+	@Email(groups = ValidGroup2.class)
 	private String userId;
 	
-	@NotBlank
-	@Length(min = 4, max = 100)
+	@NotBlank(groups = ValidGroup1.class)
+	@Length(min = 4, max = 100, groups = ValidGroup2.class)
 	@Pattern(regexp = "^[a-zA-Z0-9]+$")
 	private String password;
 	
-	@NotBlank
+	@NotBlank(groups = ValidGroup1.class)
 	private String userName;
 	
 	// pattern属性に設定したフォーマット文字列を、Date型にバインドする
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	@NotNull
+	@NotNull(groups = ValidGroup1.class)
 	private Date birthday;
 	
-	@Min(20)
-	@Max(200)
+	@Min(value= 20, groups = ValidGroup2.class)
+	@Max(value = 200, groups = ValidGroup2.class)
 	private Integer age;
 	
-	@NotNull
+	@NotNull(groups = ValidGroup1.class)
 	private Integer gender;
 }
