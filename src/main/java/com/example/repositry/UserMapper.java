@@ -1,0 +1,17 @@
+package com.example.repositry;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.example.domain.user.model.MUser;
+
+/** 
+ * MyBatisでリポジトリを作成するためには、Javaのインタフェースに@Mapperアノテーションを指定する。
+ * ORMのDAOクラスのようなもの
+ *  */
+@Mapper
+public interface UserMapper {
+	
+	/** ユーザー登録 */
+	public int insertOne(MUser user);
+
+}
