@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.user.service.UserService;
@@ -40,5 +41,28 @@ public class UserDetailController {
 		
 		// ユーザー詳細画面を表示
 		return "user/detail";
+	}
+	
+	/** ユーザー更新処理 */
+	// params属性は、type=submitのbuttonタグのname属性と同じ値を指定する。こうすることで、同一のformタグ内のボタンであっても、
+	// コントローラで受け取るメソッドを変更することができる。
+	// value属性にはURLを指定する。
+	@PostMapping(value = "/detail", params = "update")
+	public String updateUser(Model model, UserDetailForm form) {
+		
+		userService.updateUserOne(form.getUserId(), form.getPassword(), form.getUserName());
+
+		// ユーザー一覧画面にリダイレクト
+		return "redirect:/user/list";
+	}
+	
+	/** ユーザー削除処理 */
+	@PostMapping(value = "/detail", params = "delete")
+	public String deleteUser(Model model, UserDetailForm form) {
+		
+		userService.deleteUserOne(form.getUserId());
+		
+		// ユーザー一覧画面にリダイレクト
+		return "redirect:/user/list";
 	}
 }
