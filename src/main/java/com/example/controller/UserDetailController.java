@@ -49,8 +49,12 @@ public class UserDetailController {
 	// value属性にはURLを指定する。
 	@PostMapping(value = "/detail", params = "update")
 	public String updateUser(Model model, UserDetailForm form) {
-		
-		userService.updateUserOne(form.getUserId(), form.getPassword(), form.getUserName());
+		try {
+			userService.updateUserOne(form.getUserId(), form.getPassword(), form.getUserName());
+		} catch (Exception e) {
+			log.error("ユーザー更新でエラー", e);
+		}
+
 
 		// ユーザー一覧画面にリダイレクト
 		return "redirect:/user/list";

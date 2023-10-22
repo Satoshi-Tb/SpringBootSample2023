@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserService;
@@ -36,12 +37,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/** ユーザー更新（１件） */
+	// @Transactionalのアノテーションが付いたメソッド内で例外が発生すると自動でロールバックされる。
+	// ロールバック対象は、デフォルトではスローされた例外が RuntimeException のインスタンスまたはサブクラスである場合です。(Error インスタンスもデフォルトでロールバックします)。
+	// publicのメソッドにアノテーションを付与した場合のみ、ロールバックが有効になる。
+	// アノテーションを付けたメソッド以降の処理が同一トランザクション管理範囲となる。
+	@Transactional
 	@Override
 	public void updateUserOne(String userId, String password, String userName) {
 		mapper.updateOne(userId, password, userName);
 	}
 	
 	/** ユーザー削除（１件） */
+	@Transactional
 	@Override
 	public void deleteUserOne(String userId) {
 		mapper.deleteOne(userId);
