@@ -1,16 +1,30 @@
 package com.example.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.domain.user.service.UserService;
 
 @Controller
 @RequestMapping("/user")
 public class UserListController {
 	
+	@Autowired
+	private UserService userService;
+	
 	/** ユーザー一覧画面を表示 */
 	@GetMapping("/list")
-	public String getUserList() {
+	public String getUserList(Model model) {
+		// ユーザー一覧取得
+		var userList = userService.getUsers();
+		
+		// Modelに登録
+		model.addAttribute("userList", userList);
+		
+		// ユーザー一覧を表示
 		return "user/list";
 	}
 }
