@@ -8,8 +8,10 @@
   <!--
   select結果とJavaクラスのマッピングを設定する。idタグと、resultタグでマッピングを定義する。
   idタグ: 必須タグ。いわゆるユニークキーに該当する。このタグの値の数だけ、戻り値のListにデータがセットされる。
-  resultMapとselectの紐づけは、それぞれのid属性と、resultMap属性で紐づけを行う。
-  associationタグ:マッピング定義内に別のマッピング定義を入れる。いわゆるテーブル結合で利用する。ただし、結合先のデータが1件の場合。
+    resultMapとselectの紐づけは、それぞれのid属性と、resultMap属性で紐づけを行う。
+  associationタグ: マッピング定義内に別のマッピング定義を入れる。いわゆるテーブル結合で利用する。1対1の関係で使用する。
+  collectionタグ: マッピング定義内に別のマッピング定義を入れる。1対多の関係で使用する。
+  columnPrefix属性: select結果に別名指定する場合に使用する。prefix＋マッピング定義名出紐づけ可能になる。
    -->
   <resultMap type="com.example.domain.user.model.MUser" id="user">
     <id column="user_id" property="userId" />
@@ -21,12 +23,20 @@
     <result column="department_id" property="departmentId" />
     <result column="role" property="role" />
     <association property="department" resultMap="department"/>
+    <collection property="salaryList" resultMap="salary" columnPrefix="salary_"/>
   </resultMap>
 
   <!-- マッピング定義(部署) -->
   <resultMap type="com.example.domain.user.model.Department" id="department">
     <id column="department_id" property="departmentId" />
     <result column="department_name" property="departmentName" />
+  </resultMap>
+  
+  <!-- マッピング定義(給料) -->
+  <resultMap type="com.example.domain.user.model.Salary" id="salary">
+    <id column="user_id" property="userId" />
+    <id column="year_month" property="yearMonth" />
+    <result column="salary" property="salary" />
   </resultMap>
   
   <!-- ユーザー1件登録 -->
@@ -76,13 +86,25 @@
   <!-- resultMap: select結果とJavaクラスをマッピングするためのタグ -->
   <select id="findOne" resultMap="user">
     select
-      *
+        m_user.user_id
+      , m_user.password
+      , m_user.user_name
+      , m_user.birthday
+      , m_user.age
+      , m_user.gender
+      , m_department.department_id
+      , m_department.department_name
+      , t_salary.user_id as salary_user_id
+      , t_salary.year_month as salary_year_month
+      , t_salary.salary as salary_salary
     from
       m_user
       left join m_department
-          on m_user.department_id = m_department.department_id
+        on m_user.department_id = m_department.department_id
+      left join t_salary
+        on m_user.user_id = t_salary.user_id
     where
-      user_id = #{userId}
+      m_user.user_id = #{userId}
   </select>
 
   <!-- ユーザー1件更新 -->
