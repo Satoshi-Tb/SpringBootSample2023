@@ -37,7 +37,8 @@ public class SecurityConfig   {
 	    		.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/user/signup")).permitAll()
-	    		.anyRequest().authenticated())
+	    		.requestMatchers(new AntPathRequestMatcher("/admin")).hasAuthority("ROLE_ADMIN") // 権限制御
+	    		.anyRequest().authenticated()) // それ以外は直リンクNG
 		    .logout(logout ->logout
 	    		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 	    		.logoutUrl("/logout")
