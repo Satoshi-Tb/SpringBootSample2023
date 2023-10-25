@@ -12,7 +12,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig   {
 	
@@ -38,7 +38,12 @@ public class SecurityConfig   {
 	    		.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/user/signup")).permitAll()
 	    		.anyRequest().authenticated()
-		    );
+		    )
+		    .logout(logout ->logout
+	    		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+	    		.logoutUrl("/logout")
+	            .logoutSuccessUrl("/login?logout")
+	        );
         
         //CSRF対策を無効に設定（一時的）
         //http.csrf().disable();
