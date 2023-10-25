@@ -37,8 +37,7 @@ public class SecurityConfig   {
 	    		.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/user/signup")).permitAll()
-	    		.anyRequest().authenticated()
-		    )
+	    		.anyRequest().authenticated())
 		    .logout(logout ->logout
 	    		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 	    		.logoutUrl("/logout")
