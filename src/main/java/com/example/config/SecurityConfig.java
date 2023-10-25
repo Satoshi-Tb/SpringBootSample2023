@@ -63,12 +63,20 @@ public class SecurityConfig   {
 	 * */
 	@Bean
 	public InMemoryUserDetailsManager userDetailsService(){
+		
 	    UserDetails user = User.builder()
 	        .username("user")
 	        .password(passwordEncoder().encode("password"))
 	        .authorities("ROLE_GENERAL")
 	        .build();
-	    return new InMemoryUserDetailsManager(user);
+	    
+	    UserDetails admin = User.builder()
+	        .username("admin")
+	        .password(passwordEncoder().encode("password"))
+	        .authorities("ROLE_ADMIN")
+	        .build();
+	    
+	    return new InMemoryUserDetailsManager(user, admin);
 	}
 	
 	
