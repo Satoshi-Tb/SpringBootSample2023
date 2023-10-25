@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layout/layout}"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  >
 <head>
   <meta charset="UTF-8"></meta>
 </head>
@@ -11,6 +12,9 @@
     <ul class="nav flex-column">
       <li role="presentation">
         <a class="nav-link" th:href="@{'/user/list'}">ユーザ一覧</a>
+      </li>
+      <li role="presentation" sec:authorize="hasAuthority('ROLE_ADMIN')">
+        <a class="nav-link" th:href="@{'/admin'}">アドミン専用</a>
       </li>
     </ul>
   </div>
