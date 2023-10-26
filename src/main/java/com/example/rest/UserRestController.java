@@ -8,11 +8,14 @@ import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,10 +45,22 @@ public class UserRestController {
 	private MessageSource messageSource;
 	
 	@GetMapping("/get/list")
-	public List<MUser> getUserList(UserListForm form) {	
+	public ResponseEntity<List<MUser>> getUserList(UserListForm form) {	
 		var user = modelMapper.map(form, MUser.class);
+		var userList = userService.getUsers(user);
 		
-		return userService.getUsers(user);
+		return new ResponseEntity<List<MUser>>(userList,  HttpStatus.OK);
+	}
+	
+	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
+	@GetMapping("/detail/{userId:.+}")
+	public ResponseEntity<MUser> getUserOne(@PathVariable("userId") String userId) {
+
+		// ユーザーを1件取得
+		var user = userService.getUserOne(userId);
+		// user.setPassword(null);
+		
+		return new ResponseEntity<MUser>(user,  HttpStatus.OK);
 	}
 	
 	@PostMapping("/signup")
