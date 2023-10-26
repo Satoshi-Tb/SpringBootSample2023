@@ -1,7 +1,6 @@
 package com.example.rest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -45,22 +44,32 @@ public class UserRestController {
 	private MessageSource messageSource;
 	
 	@GetMapping("/get/list")
-	public ResponseEntity<List<MUser>> getUserList(UserListForm form) {	
+	public ResponseEntity<UserListResponse> getUserList(UserListForm form) {	
 		var user = modelMapper.map(form, MUser.class);
 		var userList = userService.getUsers(user);
 		
-		return new ResponseEntity<List<MUser>>(userList,  HttpStatus.OK);
+		var response = new UserListResponse();
+		response.setUserList(userList);
+		response.setCode("0000");
+		response.setMessage("");
+		
+		
+		return new ResponseEntity<UserListResponse>(response,  HttpStatus.OK);
 	}
 	
 	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
 	@GetMapping("/detail/{userId:.+}")
-	public ResponseEntity<MUser> getUserOne(@PathVariable("userId") String userId) {
+	public ResponseEntity<UserResponse> getUserOne(@PathVariable("userId") String userId) {
 
 		// ユーザーを1件取得
 		var user = userService.getUserOne(userId);
 		// user.setPassword(null);
+		var response = new UserResponse();
+		response.setUser(user);
+		response.setCode("0000");
+		response.setMessage("");
 		
-		return new ResponseEntity<MUser>(user,  HttpStatus.OK);
+		return new ResponseEntity<UserResponse>(response,  HttpStatus.OK);
 	}
 	
 	@PostMapping("/signup")
