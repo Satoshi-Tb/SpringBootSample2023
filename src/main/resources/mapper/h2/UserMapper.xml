@@ -15,6 +15,7 @@
    -->
   <resultMap type="com.example.domain.user.model.MUser" id="user">
     <id column="user_id" property="userId" />
+    <result column="id" property="id" />  
     <result column="password" property="password" />
     <result column="user_name" property="userName" />
     <result column="birthday" property="birthday" />
@@ -69,7 +70,14 @@
    -->
   <select id="findMany" resultType="MUser">
     select
-      *
+        user_id
+      , user_id as id
+      , password
+      , user_name
+      , birthday
+      , age
+      , gender
+      , department_id
     from
       m_user
     <where>
@@ -87,6 +95,7 @@
   <select id="findOne" resultMap="user">
     select
         m_user.user_id
+      , m_user.user_id as id
       , m_user.password
       , m_user.user_name
       , m_user.birthday
