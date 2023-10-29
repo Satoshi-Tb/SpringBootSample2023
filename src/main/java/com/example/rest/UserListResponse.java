@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class UserListResponse {
-	private List<MUser> userList;
+	private List<MUser> data;
 	private String code;
 	private String message;
 }

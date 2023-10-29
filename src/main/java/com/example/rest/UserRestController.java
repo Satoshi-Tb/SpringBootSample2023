@@ -49,7 +49,7 @@ public class UserRestController {
 		var userList = userService.getUsers(user);
 		
 		var response = new UserListResponse();
-		response.setUserList(userList);
+		response.setData(userList);
 		response.setCode("0000");
 		response.setMessage("");
 		
