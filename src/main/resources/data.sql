@@ -46,3 +46,14 @@ INSERT INTO t_salary (
 , ('user@co.jp', '2020/12', 290000)
 , ('user@co.jp', '2021/01', 300000)
 ;
+
+/* 汎用コード管理 */
+INSERT INTO m_code (
+    category
+  , code
+  , name
+) VALUES
+('gender', '1', '男性')
+, ('gender', '2', '女性')
+, ('gender', '3', 'その他')
+;
