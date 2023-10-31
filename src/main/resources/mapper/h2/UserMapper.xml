@@ -21,6 +21,7 @@
     <result column="birthday" property="birthday" />
     <result column="age" property="age" />
     <result column="gender" property="gender" />
+    <result column="gender_name" property="genderName" />
     <result column="department_id" property="departmentId" />
     <result column="role" property="role" />
     <association property="department" resultMap="department"/>
@@ -77,6 +78,7 @@
       , birthday
       , age
       , gender
+      , casewhen(gender = 1, '男性', '女性') as gender_name
       , department_id
     from
       m_user
