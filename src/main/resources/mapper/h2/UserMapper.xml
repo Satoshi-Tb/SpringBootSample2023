@@ -69,25 +69,28 @@
   <!-- 
   whereタグ: ifタグが1つでもtrueとなれば、where句を追加する。
    -->
-  <select id="findMany" resultType="MUser">
+  <select id="findMany" resultMap="user">
     select
-        user_id
-      , user_id as id
-      , password
-      , user_name
-      , birthday
-      , age
-      , gender
-      , casewhen(gender = 1, '男性', '女性') as gender_name
-      , department_id
+        m_user.user_id
+      , m_user.user_id as id
+      , m_user.password
+      , m_user.user_name
+      , m_user.birthday
+      , m_user.age
+      , m_user.gender
+      , casewhen(m_user.gender = 1, '男性', '女性') as gender_name
+      , m_user.department_id
+      , m_department.department_name
     from
       m_user
+      left join m_department 
+         on m_user.department_id = m_department.department_id
     <where>
       <if test="userId != null">
-        user_id like '%' || #{userId} || '%'
+        m_user.user_id like '%' || #{userId} || '%'
       </if>
       <if test="userName != null">
-        and user_name like '%' || #{userName} || '%'
+        and m_user.user_name like '%' || #{userName} || '%'
       </if>
     </where>
   </select>
