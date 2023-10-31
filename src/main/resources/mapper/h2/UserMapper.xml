@@ -93,6 +93,9 @@
         and m_user.user_name like '%' || #{userName} || '%'
       </if>
     </where>
+    order by
+      m_user.department_id
+      , m_user.user_id
   </select>
   
   <!-- ユーザー1件検索 -->
