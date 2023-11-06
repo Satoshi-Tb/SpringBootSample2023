@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -96,12 +97,20 @@ public class UserRestController {
 	}
 	
 	@PutMapping("/update")  // Putメソッドにマップ
-	public int updateUser(UserDetailForm form) {
+	public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest user) {
 		// ユーザーを更新
-		userService.updateUserOne(form.getUserId(), form.getPassword(), form.getUserName());
+		userService.updateUserOne(user.getUserId(), user.getPassword(), user.getUserName());
 		
-		// なぜ0を返す？
-		return 0;
+		//return getUserOne(user.getUserId());
+		// ユーザーを1件取得
+		var resp = userService.getUserOne(user.getUserId());
+		// user.setPassword(null);
+		var response = new UserResponse();
+		response.setUser(resp);
+		response.setCode("0000");
+		response.setMessage("");
+		
+		return new ResponseEntity<UserResponse>(response,  HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete")  // Deleteメソッドにマップ
