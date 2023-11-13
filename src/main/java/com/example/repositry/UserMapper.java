@@ -24,6 +24,9 @@ public interface UserMapper {
 	/** ユーザー取得 */
 	public List<MUser> findManyByPagination(UserListCriteria condition);
 	
+	/** ユーザー取得（総件数） */
+	public int findManyByPaginationTotalCount(UserListCriteria condition);
+	
 	/** ユーザー取得（1件） */
 	public MUser findOne(String userId);
 

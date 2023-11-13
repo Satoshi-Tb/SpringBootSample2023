@@ -41,8 +41,13 @@ public class UserServiceImpl implements UserService {
 
 	/** ユーザー取得 */
 	@Override
-	public List<MUser> getUsersByPagination(UserListCriteria condition) {
+	public List<MUser> getUsersByPagination(UserListCriteria condition) {		
 		return mapper.findManyByPagination(condition);
+	}
+	
+	@Override
+	public int getUsersByPaginationTotalCount(UserListCriteria condition) {
+		return mapper.findManyByPaginationTotalCount(condition);
 	}
 	
 	/** ユーザー取得（１件） */
@@ -69,5 +74,7 @@ public class UserServiceImpl implements UserService {
 	public void deleteUserOne(String userId) {
 		mapper.deleteOne(userId);
 	}
+
+
 
 }

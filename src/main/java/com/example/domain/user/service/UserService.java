@@ -16,6 +16,9 @@ public interface UserService {
 	/** ユーザー取得(ページネーション) */
 	public List<MUser> getUsersByPagination(UserListCriteria condition);
 	
+	/** ユーザー取得(ページネーション)(総件数) */
+	public int getUsersByPaginationTotalCount(UserListCriteria condition);
+	
 	/** ユーザー取得（1件） */
 	public MUser getUserOne(String userId);
 	

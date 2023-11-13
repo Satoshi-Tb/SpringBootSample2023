@@ -50,6 +50,7 @@ public class UserRestController {
 		var userList = userService.getUsers(user);
 		
 		var response = new UserListResponse();
+		response.setTotalCount(userList.size());
 		response.setData(userList);
 		response.setCode("0000");
 		response.setMessage("");
@@ -63,8 +64,14 @@ public class UserRestController {
 	public ResponseEntity<UserListResponse> getUserListByPagination(UserListCriteria condition) {	
 		
 		condition.setOffset(condition.getPage() * condition.getSize());
+		
+		// １ページあたりのデータ
 		var userList = userService.getUsersByPagination(condition);
+		// 検索条件に対する総件数
+		int totalCount = userService.getUsersByPaginationTotalCount(condition);
+		
 		var response = new UserListResponse();
+		response.setTotalCount(totalCount);
 		response.setData(userList);
 		response.setCode("0000");
 		response.setMessage("");
