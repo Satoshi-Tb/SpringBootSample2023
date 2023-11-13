@@ -30,3 +30,11 @@ CREATE TABLE IF NOT EXISTS t_salary (
   , salary INT
   , PRIMARY KEY(user_id, year_month)
 );
+
+/* 汎用コード管理 */
+CREATE TABLE IF NOT EXISTS m_code (
+    category VARCHAR(100)
+  , code VARCHAR(100)
+  , name VARCHAR(100)
+  , PRIMARY KEY(category, code)
+);

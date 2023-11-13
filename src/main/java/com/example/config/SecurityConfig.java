@@ -37,7 +37,7 @@ public class SecurityConfig   {
 	    		.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
 	    		.requestMatchers(new AntPathRequestMatcher("/user/signup")).permitAll()
-	    		.requestMatchers(new AntPathRequestMatcher("/api/user/**")).permitAll()    		
+	    		.requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()  // いったん無制限
 	    		.requestMatchers(new AntPathRequestMatcher("/admin")).hasAuthority("ROLE_ADMIN") // 権限制御
 	    		.anyRequest().authenticated()) // それ以外は直リンクNG
 		    .logout(logout ->logout
@@ -47,7 +47,7 @@ public class SecurityConfig   {
 	        );
         
         //CSRF対策を無効に設定（一時的）
-        //http.csrf().disable();
+        http.csrf().disable();
         
         return http.build();
 	}

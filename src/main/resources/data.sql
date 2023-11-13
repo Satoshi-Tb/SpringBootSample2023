@@ -13,8 +13,8 @@ INSERT INTO m_user (
   , department_id
   , role
 ) VALUES
-('system@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'システム管理者', '2000-01-01', 21, 1, 1, 'ROLE_ADMIN')
-, ('user@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー1', '2000-01-01', 21, 2, 2, 'ROLE_GENERAL')
+('system1@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'システム管理者', '2000-01-01', 21, 1, 1, 'ROLE_ADMIN')
+, ('user1@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー1', '2000-01-01', 21, 2, 2, 'ROLE_GENERAL')
 , ('user2@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー2', '2000-01-01', 41, 2, 2, 'ROLE_GENERAL')
 , ('user3@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー3', '2000-01-01', 31, 1, 2, 'ROLE_GENERAL')
 , ('user4@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー4', '2000-01-01', 25, 1, 2, 'ROLE_GENERAL')
@@ -45,4 +45,15 @@ INSERT INTO t_salary (
 ('user@co.jp', '2020/11', 280000)
 , ('user@co.jp', '2020/12', 290000)
 , ('user@co.jp', '2021/01', 300000)
+;
+
+/* 汎用コード管理 */
+INSERT INTO m_code (
+    category
+  , code
+  , name
+) VALUES
+('gender', '1', '男性')
+, ('gender', '2', '女性')
+, ('gender', '3', 'その他')
 ;
