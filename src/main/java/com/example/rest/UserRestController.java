@@ -58,6 +58,20 @@ public class UserRestController {
 		return new ResponseEntity<UserListResponse>(response,  HttpStatus.OK);
 	}
 	
+	
+	@GetMapping("/get/list-pager")
+	public ResponseEntity<UserListResponse> getUserListByPagination(UserListCriteria condition) {	
+		
+		condition.setOffset(condition.getPage() * condition.getSize());
+		var userList = userService.getUsersByPagination(condition);
+		var response = new UserListResponse();
+		response.setData(userList);
+		response.setCode("0000");
+		response.setMessage("");
+		
+		return new ResponseEntity<UserListResponse>(response,  HttpStatus.OK);
+	}
+	
 	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
 	@GetMapping("/detail/{userId:.+}")
 	public ResponseEntity<UserResponse> getUserOne(@PathVariable("userId") String userId) {

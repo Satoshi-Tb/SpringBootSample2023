@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.domain.user.model.MUser;
+import com.example.rest.UserListCriteria;
 
 /** 
  * MyBatisでリポジトリを作成するためには、Javaのインタフェースに@Mapperアノテーションを指定する。
@@ -19,6 +20,9 @@ public interface UserMapper {
 	
 	/** ユーザー取得 */
 	public List<MUser> findMany(MUser user);
+	
+	/** ユーザー取得 */
+	public List<MUser> findManyByPagination(UserListCriteria condition);
 	
 	/** ユーザー取得（1件） */
 	public MUser findOne(String userId);
