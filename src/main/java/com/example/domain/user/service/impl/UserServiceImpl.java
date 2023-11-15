@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserService;
 import com.example.repositry.UserMapper;
+import com.example.rest.UserListCriteria;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,6 +39,17 @@ public class UserServiceImpl implements UserService {
 		return mapper.findMany(user);
 	}
 
+	/** ユーザー取得 */
+	@Override
+	public List<MUser> getUsersByPagination(UserListCriteria condition) {		
+		return mapper.findManyByPagination(condition);
+	}
+	
+	@Override
+	public int getUsersByPaginationTotalCount(UserListCriteria condition) {
+		return mapper.findManyByPaginationTotalCount(condition);
+	}
+	
 	/** ユーザー取得（１件） */
 	@Override
 	public MUser getUserOne(String userId) {
@@ -62,5 +74,7 @@ public class UserServiceImpl implements UserService {
 	public void deleteUserOne(String userId) {
 		mapper.deleteOne(userId);
 	}
+
+
 
 }

@@ -11,4 +11,5 @@ public class UserListResponse {
 	private List<MUser> data;
 	private String code;
 	private String message;
+	private int totalCount;
 }

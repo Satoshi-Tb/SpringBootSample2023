@@ -50,12 +50,31 @@ public class UserRestController {
 		var userList = userService.getUsers(user);
 		
 		var response = new UserListResponse();
+		response.setTotalCount(userList.size());
 		response.setData(userList);
 		response.setCode("0000");
 		response.setMessage("");
 		
 		
 		return new ResponseEntity<UserListResponse>(response,  HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/get/list-pager")
+	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPagination(UserListCriteria condition) {	
+		
+		condition.setOffset(condition.getPage() * condition.getSize());
+		
+		// １ページあたりのデータ
+		var userList = userService.getUsersByPagination(condition);
+		// 検索条件に対する総件数
+		int totalCount = userService.getUsersByPaginationTotalCount(condition);
+		
+		var response = new UserListPaginationResponse();
+		response.setResultNum(totalCount);
+		response.setUserList(userList);
+
+		return RestResponse.createSuccessResponse(response);
 	}
 	
 	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
@@ -70,11 +89,11 @@ public class UserRestController {
 		response.setCode("0000");
 		response.setMessage("");
 		
-		return new ResponseEntity<UserResponse>(response,  HttpStatus.OK);
+    	return new ResponseEntity<UserResponse>(response,  HttpStatus.OK);
 	}
 	
 	@PostMapping("/signup")
-	public RestResult postSignup(@Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Locale locale) {
+	public ResponseEntity<RestResponse<MUser>> postSignup(@Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Locale locale) {
 		if (bindingResult.hasErrors()) {
 			Map<String, String> errors = new HashMap<>();
 			
@@ -85,7 +104,7 @@ public class UserRestController {
 			}
 			
 			// 結果:NG
-			return new RestResult(90, errors);
+			return RestResponse.createErrorResponse("9999", errors, HttpStatus.BAD_REQUEST);
 		}
 		
 		MUser user = modelMapper.map(form, MUser.class);
@@ -93,31 +112,26 @@ public class UserRestController {
 		userService.signup(user);
 		
 		// 結果：OK
-		return new RestResult(0, null);
+		return RestResponse.createSuccessResponse(user);
 	}
 	
 	@PutMapping("/update")  // Putメソッドにマップ
-	public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest user) {
+	public ResponseEntity<RestResponse<MUser>> updateUser(@RequestBody UserRequest user) {
 		// ユーザーを更新
 		userService.updateUserOne(user.getUserId(), user.getPassword(), user.getUserName());
 		
-		//return getUserOne(user.getUserId());
 		// ユーザーを1件取得
 		var resp = userService.getUserOne(user.getUserId());
 		// user.setPassword(null);
-		var response = new UserResponse();
-		response.setUser(resp);
-		response.setCode("0000");
-		response.setMessage("");
 		
-		return new ResponseEntity<UserResponse>(response,  HttpStatus.OK);
+		return RestResponse.createSuccessResponse(resp);
 	}
 	
 	@DeleteMapping("/delete")  // Deleteメソッドにマップ
-	public int deleteUse(UserDetailForm form) {
+	public ResponseEntity<RestResponse<Object>> deleteUse(UserDetailForm form) {
 		userService.deleteUserOne(form.getUserId());
 		
-		return 0;
+		return RestResponse.createSuccessResponse();
 	}
 
 }
