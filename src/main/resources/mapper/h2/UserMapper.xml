@@ -188,6 +188,24 @@
       user_id = #{userId}
   </update>
 
+  <!-- ユーザー1件更新 パラメータModel版 -->
+  <update id="updateByUser">
+    update
+      m_user
+    set
+        password = #{password}
+    <choose>
+      <when test="updateMode == 'append'">
+        , user_name = user_name || '　' || #{userName}
+      </when>
+      <otherwise>
+        , user_name = #{userName}
+      </otherwise>
+    </choose>
+    where
+      user_id = #{userId}
+  </update>
+
   <!-- ユーザー1件削除 -->
   <delete id="deleteOne">
     delete from

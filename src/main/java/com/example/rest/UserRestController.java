@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.domain.user.model.CustomMUser;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
@@ -117,13 +118,14 @@ public class UserRestController {
 	}
 	
 	@PutMapping("/update")  // Putメソッドにマップ
-	public ResponseEntity<RestResponse<MUser>> updateUser(@RequestBody UserRequest user) {
+	public ResponseEntity<RestResponse<MUser>> updateUser(@RequestBody UserRequest req) {
+		CustomMUser user = modelMapper.map(req, CustomMUser.class);
+		
 		// ユーザーを更新
-		userService.updateUserOne(user.getUserId(), user.getPassword(), user.getUserName());
+		userService.updateUser(user);
 		
 		// ユーザーを1件取得
 		var resp = userService.getUserOne(user.getUserId());
-		// user.setPassword(null);
 		
 		return RestResponse.createSuccessResponse(resp);
 	}

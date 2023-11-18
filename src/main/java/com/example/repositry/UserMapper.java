@@ -35,6 +35,10 @@ public interface UserMapper {
             @Param("password") String password,
             @Param("userName") String userName);
 
+    /** ユーザー更新(1件) */
+    public void updateByUser(MUser user);
+
+    
     /** ユーザー削除(1件) */
     public int deleteOne(@Param("userId") String userId);
 }

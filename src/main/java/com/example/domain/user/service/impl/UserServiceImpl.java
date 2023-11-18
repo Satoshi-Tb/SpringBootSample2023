@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.domain.user.model.CustomMUser;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
@@ -66,6 +67,16 @@ public class UserServiceImpl implements UserService {
 	public void updateUserOne(String userId, String password, String userName) {
 		//パスワード暗号化
 		mapper.updateOne(userId, passwordEncoder.encode(password), userName);
+	}
+	
+	@Transactional
+	@Override
+	public void updateUser(CustomMUser user) {
+		//パスワード暗号化
+		String newPasswd = passwordEncoder.encode(user.getPassword());
+		user.setPassword(newPasswd);
+
+		mapper.updateByUser(user);
 	}
 	
 	/** ユーザー削除（１件） */

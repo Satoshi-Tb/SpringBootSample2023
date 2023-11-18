@@ -2,6 +2,7 @@ package com.example.domain.user.service;
 
 import java.util.List;
 
+import com.example.domain.user.model.CustomMUser;
 import com.example.domain.user.model.MUser;
 
 public interface UserService {
@@ -23,6 +24,9 @@ public interface UserService {
 	
 	/** ユーザー更新（1件） */
 	public void updateUserOne(String userId, String password, String userName);
+	
+	/** ユーザー更新（1件） */
+	public void updateUser(CustomMUser user);
 	
 	/** ユーザー削除（1件） */
 	public void deleteUserOne(String userId);

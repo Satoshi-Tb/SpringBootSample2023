@@ -14,4 +14,5 @@ public class UserRequest {
     private Integer age;
     private Integer gender;
     private Integer departmentId;
+    private String updateMode;
 }
