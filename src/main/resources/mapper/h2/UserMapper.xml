@@ -98,11 +98,10 @@
       , m_user.user_id
   </select>
   
-    <!-- 
-  ページネーション利用版
-   -->
-  <select id="findManyByPagination" resultMap="user">
-    select
+  
+  <!-- ユーザー一覧共通SQL -->
+  <sql id="userList">
+      select
         m_user.user_id
       , m_user.user_id as id
       , m_user.password
@@ -125,6 +124,13 @@
         and m_user.user_name like '%' || #{userName} || '%'
       </if>
     </where>
+  </sql>
+  
+    <!-- 
+  ページネーション利用版
+   -->
+  <select id="findManyByPagination" resultMap="user">
+	<include refid="userList"/>
     order by
       m_user.department_id
       , m_user.user_id
@@ -136,18 +142,9 @@
    -->
   <select id="findManyByPaginationTotalCount" resultType="int">
     select count(*) as total_count
-    from
-      m_user
-      left join m_department 
-         on m_user.department_id = m_department.department_id
-    <where>
-      <if test="userId != null">
-        m_user.user_id like '%' || #{userId} || '%'
-      </if>
-      <if test="userName != null">
-        and m_user.user_name like '%' || #{userName} || '%'
-      </if>
-    </where>
+    from (
+		<include refid="userList"/>
+	)
   </select>
   
   <!-- ユーザー1件検索 -->
