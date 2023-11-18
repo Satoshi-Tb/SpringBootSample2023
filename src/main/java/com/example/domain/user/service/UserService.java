@@ -3,7 +3,6 @@ package com.example.domain.user.service;
 import java.util.List;
 
 import com.example.domain.user.model.MUser;
-import com.example.rest.UserListCriteria;
 
 public interface UserService {
 	

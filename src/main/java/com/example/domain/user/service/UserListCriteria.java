@@ -1,4 +1,4 @@
-package com.example.rest;
+package com.example.domain.user.service;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

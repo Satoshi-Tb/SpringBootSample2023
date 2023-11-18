@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.user.model.MUser;
+import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
 import com.example.repositry.UserMapper;
-import com.example.rest.UserListCriteria;
 
 @Service
 public class UserServiceImpl implements UserService {

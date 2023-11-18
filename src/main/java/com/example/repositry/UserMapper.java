@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.domain.user.model.MUser;
-import com.example.rest.UserListCriteria;
+import com.example.domain.user.service.UserListCriteria;
 
 /** 
  * MyBatisでリポジトリを作成するためには、Javaのインタフェースに@Mapperアノテーションを指定する。

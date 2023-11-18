@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.user.model.MUser;
+import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
 import com.example.form.GroupOrder;
 import com.example.form.SignupForm;
