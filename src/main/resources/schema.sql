@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS m_user (
   , birthday DATE
   , age INT
   , gender INT
+  , profile VARCHAR(200)
   , department_id INT
   , role VARCHAR(50)
 );

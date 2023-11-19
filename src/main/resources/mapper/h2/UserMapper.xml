@@ -22,6 +22,7 @@
     <result column="age" property="age" />
     <result column="gender" property="gender" />
     <result column="gender_name" property="genderName" />
+    <result column="profile" property="profile" />
     <result column="department_id" property="departmentId" />
     <result column="role" property="role" />
     <association property="department" resultMap="department"/>
@@ -50,6 +51,7 @@
       , birthday
       , age
       , gender
+      , profile
       , department_id
       , role
     )
@@ -60,6 +62,7 @@
       , #{birthday}
       , #{age}
       , #{gender}
+      , #{profile}
       , #{departmentId}
       , #{role}
     )
@@ -79,6 +82,7 @@
       , m_user.age
       , m_user.gender
       , casewhen(m_user.gender = 1, '男性', '女性') as gender_name
+      , m_user.profile
       , m_user.department_id
       , m_department.department_name
     from
@@ -110,6 +114,7 @@
       , m_user.age
       , m_user.gender
       , casewhen(m_user.gender = 1, '男性', '女性') as gender_name
+      , m_user.profile
       , m_user.department_id
       , m_department.department_name
     from
@@ -158,6 +163,7 @@
       , m_user.birthday
       , m_user.age
       , m_user.gender
+      , m_user.profile
       , m_department.department_id
       , m_department.department_name
       , t_salary.user_id as salary_user_id
