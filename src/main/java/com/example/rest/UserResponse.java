@@ -7,6 +7,4 @@ import lombok.Data;
 @Data
 public class UserResponse {
 	private MUser user;
-	private String code;
-	private String message;
 }

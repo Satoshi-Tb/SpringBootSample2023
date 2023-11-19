@@ -81,17 +81,16 @@ public class UserRestController {
 	
 	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
 	@GetMapping("/detail/{userId:.+}")
-	public ResponseEntity<UserResponse> getUserOne(@PathVariable("userId") String userId) {
+	public ResponseEntity<RestResponse<UserResponse>> getUserOne(@PathVariable("userId") String userId) {
 
 		// ユーザーを1件取得
 		var user = userService.getUserOne(userId);
-		// user.setPassword(null);
+
 		var response = new UserResponse();
+		// データなし：エラー
 		response.setUser(user);
-		response.setCode("0000");
-		response.setMessage("");
 		
-    	return new ResponseEntity<UserResponse>(response,  HttpStatus.OK);
+		return RestResponse.createSuccessResponse(response);
 	}
 	
 	@PostMapping("/signup")
