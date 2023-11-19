@@ -13,6 +13,7 @@ public class UserRequest {
     private Date birthday;
     private Integer age;
     private Integer gender;
+    private String profile;
     private Integer departmentId;
     private String updateMode;
 }

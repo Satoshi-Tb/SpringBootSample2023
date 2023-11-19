@@ -199,13 +199,15 @@
     update
       m_user
     set
-        password = #{password}
     <choose>
       <when test="updateMode == 'append'">
-        , user_name = user_name || '　' || #{userName}
+        user_name = user_name || '　' || #{userName}
       </when>
       <otherwise>
-        , user_name = #{userName}
+        user_name = #{userName}
+        , age = #{age}
+        , gender = #{gender}
+        , profile = #{profile}
       </otherwise>
     </choose>
     where
