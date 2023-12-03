@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.user.model.CustomMUser;
@@ -27,7 +28,6 @@ import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
 import com.example.form.GroupOrder;
 import com.example.form.SignupForm;
-import com.example.form.UserDetailForm;
 import com.example.form.UserListForm;
 
 /**
@@ -62,11 +62,19 @@ public class UserRestController {
 	}
 	
 	
-	@GetMapping("/get/list-pager")
-	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPagination(UserListCriteria condition) {	
-		
+	@PostMapping("/get/list-pager")
+	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationPost(@RequestBody UserListCriteria condition) {	
 		condition.setOffset(condition.getPage() * condition.getSize());
-		
+		return getUserListByPagination(condition);
+	}
+	
+	@GetMapping("/get/list-pager")
+	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationGet(@RequestParam UserListCriteria condition) {	
+		condition.setOffset(condition.getPage() * condition.getSize());
+		return getUserListByPagination(condition);
+	}
+	
+	private ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPagination(UserListCriteria condition) {
 		// １ページあたりのデータ
 		var userList = userService.getUsersByPagination(condition);
 		// 検索条件に対する総件数
@@ -130,9 +138,10 @@ public class UserRestController {
 	}
 	
 	@DeleteMapping("/delete")  // Deleteメソッドにマップ
-	public ResponseEntity<RestResponse<Object>> deleteUse(UserDetailForm form) {
-		userService.deleteUserOne(form.getUserId());
+	public ResponseEntity<RestResponse<Object>> deleteUser(@RequestBody UserDeleteRequest req) {
+		userService.deleteUsers(req.getUserIdList());
 		
+		// 結果：OK
 		return RestResponse.createSuccessResponse();
 	}
 

@@ -30,4 +30,7 @@ public interface UserService {
 	
 	/** ユーザー削除（1件） */
 	public void deleteUserOne(String userId);
+	
+	/** ユーザー削除（複数件） */
+	public void deleteUsers(List<String> userIdList);
 }

@@ -7,8 +7,7 @@ import lombok.Data;
 public class UserListCriteria {
     private String userId;
     private String userName;
-    
-    
+
     private Integer offset;
     
     @NotNull

@@ -86,6 +86,12 @@ public class UserServiceImpl implements UserService {
 		mapper.deleteOne(userId);
 	}
 
-
-
+	/** ユーザー削除（複数件） */
+	@Transactional
+	@Override
+	public void deleteUsers(List<String> userIdList) {
+		for (String userId : userIdList) {
+			mapper.deleteOne(userId);
+		}
+	}
 }
