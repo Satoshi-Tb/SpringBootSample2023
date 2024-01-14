@@ -143,6 +143,9 @@ public class UserRestController {
 		
 		// 結果：OK
 		return RestResponse.createSuccessResponse();
+		
+		// エラーテスト用のレスポンス
+		//return RestResponse.createErrorResponse("9999", null, HttpStatus.BAD_REQUEST);
 	}
 
 }
