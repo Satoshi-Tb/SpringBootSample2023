@@ -179,6 +179,30 @@
       m_user.user_id = #{userId}
   </select>
 
+  <!-- 指定ユーザーの次のIDを取得 -->
+  <select id="findNextUserId" resultType="String">
+    select
+        m_user.user_id
+    from
+      m_user
+    where
+      m_user.user_id > #{userId}
+    order by m_user.user_id
+    limit 1
+  </select>
+
+  <!-- 指定ユーザーの前のIDを取得 -->
+  <select id="findBeforeUserId" resultType="String">
+    select
+        m_user.user_id
+    from
+      m_user
+    where
+      <![CDATA[ m_user.user_id < #{userId} ]]>
+    order by m_user.user_id desc
+    limit 1
+  </select>
+
   <!-- ユーザー1件更新 -->
   <!-- 
     @Paramアノテーションで指定した値をSQLに埋め込むことができる。

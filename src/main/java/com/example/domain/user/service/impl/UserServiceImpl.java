@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserService {
 		return mapper.findOne(userId);
 	}
 
+	
+	
 	/** ユーザー更新（１件） */
 	// @Transactionalのアノテーションが付いたメソッド内で例外が発生すると自動でロールバックされる。
 	// ロールバック対象は、デフォルトではスローされた例外が RuntimeException のインスタンスまたはサブクラスである場合です。(Error インスタンスもデフォルトでロールバックします)。
@@ -93,5 +95,15 @@ public class UserServiceImpl implements UserService {
 		for (String userId : userIdList) {
 			mapper.deleteOne(userId);
 		}
+	}
+
+	@Override
+	public String getNextUserId(String userId) {
+		return mapper.findNextUserId(userId);
+	}
+
+	@Override
+	public String getBeforeUserId(String userId) {
+		return mapper.findBeforeUserId(userId);
 	}
 }

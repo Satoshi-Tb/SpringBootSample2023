@@ -92,11 +92,15 @@ public class UserRestController {
 	public ResponseEntity<RestResponse<UserResponse>> getUserOne(@PathVariable("userId") String userId) {
 
 		// ユーザーを1件取得
-		var user = userService.getUserOne(userId);
+		MUser user = userService.getUserOne(userId);
+		String nextUserId = userService.getNextUserId(userId);
+		String beforeUserId = userService.getBeforeUserId(userId);
 
-		var response = new UserResponse();
+		UserResponse response = new UserResponse();
 		// データなし：エラー
 		response.setUser(user);
+		response.setNextUserId(nextUserId);
+		response.setBeforeUserId(beforeUserId);
 		
 		return RestResponse.createSuccessResponse(response);
 	}

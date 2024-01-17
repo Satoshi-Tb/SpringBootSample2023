@@ -29,6 +29,12 @@ public interface UserMapper {
 	
 	/** ユーザー取得（1件） */
 	public MUser findOne(String userId);
+	
+	/** 次のユーザーIDを取得 */
+	public String findNextUserId(String userId);
+
+	/** 前のユーザーIDを取得 */
+	public String findBeforeUserId(String userId);
 
     /** ユーザー更新(1件) */
     public void updateOne(@Param("userId") String userId,
