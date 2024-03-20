@@ -1,4 +1,4 @@
-package com.example.domain.user.service;
+package com.example.domain.user.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,9 +15,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.example.domain.user.model.MUser;
+import com.example.domain.user.service.ExcelFileDownloadService;
 
 @Service
-public class ExcelFileSampleService {
+public class ExcelFileDownloadServiceImple implements ExcelFileDownloadService {
     public ByteArrayInputStream generateExcelFile() throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sample Sheet");

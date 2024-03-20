@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.user.model.MUser;
-import com.example.domain.user.service.ExcelFileSampleService;
+import com.example.domain.user.service.ExcelFileDownloadService;
 import com.example.domain.user.service.UserService;
 
 @RestController
@@ -22,7 +22,7 @@ import com.example.domain.user.service.UserService;
 public class ExcelFileDownloadController {
 
 	@Autowired
-	private ExcelFileSampleService excelFileSampleService;
+	private ExcelFileDownloadService excelFileSampleService;
 	
 	@Autowired
 	private UserService userService;
