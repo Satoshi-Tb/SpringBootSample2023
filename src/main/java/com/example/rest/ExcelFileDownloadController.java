@@ -58,4 +58,15 @@ public class ExcelFileDownloadController {
 
         return new ResponseEntity<>(content, headers, HttpStatus.OK);
     }
+    
+    @GetMapping("/bigdata")
+    public ResponseEntity<byte[]> downloadBigData() throws IOException {
+        ByteArrayInputStream in = excelFileSampleService.generateBigDataExcel();
+        
+        byte[] content = in.readAllBytes();
+
+        HttpHeaders headers = createHeaders("bigdata.xlsx");
+
+        return new ResponseEntity<>(content, headers, HttpStatus.OK);
+    }
 }

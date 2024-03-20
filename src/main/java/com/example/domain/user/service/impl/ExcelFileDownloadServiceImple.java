@@ -64,4 +64,19 @@ public class ExcelFileDownloadServiceImple implements ExcelFileDownloadService {
             return new ByteArrayInputStream(out.toByteArray());
         }
     }
+
+	@Override
+	public ByteArrayInputStream generateBigDataExcel() throws IOException {
+		// 巨大データ作成サンプル
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Sample Sheet");
+            Row row = sheet.createRow(0);
+            Cell cell = row.createCell(0);
+            cell.setCellValue("Excelファイルサンプルです");
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+	}
 }
