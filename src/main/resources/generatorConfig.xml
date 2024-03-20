@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+  <context id="handsOnTables" targetRuntime="MyBatis3">
+    <!-- Connection Settings -->
+    <jdbcConnection driverClass="org.h2.Driver"
+        connectionURL="jdbc:h2:mem:testdb"
+        userId="sa"
+        password="">
+    </jdbcConnection>
+
+    <!-- Javaモデルジェネレータの設定 -->
+    <javaModelGenerator targetPackage="com.example.domain.generator" targetProject="src/main/java"/>
+
+    <!-- SQLマップジェネレータの設定 -->
+    <sqlMapGenerator targetPackage="com.example.repositry.generator" targetProject="src/main/resources"/>
+
+    <!-- Javaインターフェースジェネレータの設定 -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.repositry.generator" targetProject="src/main/java"/>
+
+    <!-- 生成するテーブルの設定 -->
+    <table tableName="m_user"/>
+  </context>
+</generatorConfiguration>
