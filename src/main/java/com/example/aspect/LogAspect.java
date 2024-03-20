@@ -33,9 +33,9 @@ public class LogAspect {
 	}
 	
     /** コントローラーの実行前後にログ出力する */
-    //@Around("bean(*Controller)")
+    @Around("bean(*Controller)")
     //@Around("@annotation(org.springframework.web.bind.annotation.GetMapping)")
-    @Around("@within(org.springframework.stereotype.Controller)")
+    //@Around("@within(org.springframework.stereotype.Controller)")
     public Object startLog(ProceedingJoinPoint jp) throws Throwable {
 
         // 開始ログ出力
