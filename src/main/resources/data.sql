@@ -15,16 +15,26 @@ INSERT INTO m_user (
   , role
 ) VALUES
 ('system1@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'システム管理者', '2000-01-01', 21, 1, 'システム管理者です', 1, 'ROLE_ADMIN')
+,('system2@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'システム管理者2', '2000-01-01', 31, 2, 'ユーザーです', 1, 'ROLE_ADMIN')
 , ('user1@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー1', '2000-01-01', 21, 2, 'ユーザーです', 2, 'ROLE_GENERAL')
-, ('user2@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー2', '2000-01-01', 41, 2, 'ユーザーです', 2, 'ROLE_GENERAL')
-, ('user3@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー3', '2000-01-01', 31, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
-, ('user4@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー4', '2000-01-01', 25, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
-, ('user5@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー5', '2000-01-01', 35, 2, 'ユーザーです', 2, 'ROLE_GENERAL')
-, ('user6@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー6', '2000-01-01', 35, 2, 'ユーザーです', 3, 'ROLE_GENERAL')
-, ('user7@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー7', '2000-01-01', 28, 2, 'ユーザーです', 3, 'ROLE_GENERAL')
+, ('user2@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー2', '1980-04-01', 41, 2, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user3@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー3', '1990-10-10', 31, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user4@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー4', '1997-01-01', 25, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user5@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー5', '1984-11-11', 35, 2, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user6@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー6', '1984-11-01', 35, 2, 'ユーザーです', 3, 'ROLE_GENERAL')
+, ('user7@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー7', '1995-06-21', 28, 2, 'ユーザーです', 3, 'ROLE_GENERAL')
 , ('user8@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー8', '2000-01-01', 55, 1, 'ユーザーです', 3, 'ROLE_GENERAL')
 , ('user9@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー9', '2000-01-01', 50, 1, 'ユーザーです', 3, 'ROLE_GENERAL')
-,('system2@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'システム管理者2', '2000-01-01', 31, 2, 'ユーザーです', 1, 'ROLE_ADMIN')
+, ('user10@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー10', '2000-01-01', 29, 1, 'ユーザーです', 3, 'ROLE_GENERAL')
+, ('user11@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー11', '2000-01-01', 33, 2, 'ユーザーです', 3, 'ROLE_GENERAL')
+, ('user12@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー12', '2000-01-01', 34, 2, 'ユーザーです', 3, 'ROLE_GENERAL')
+, ('user13@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー13', '2000-01-01', 49, 1, 'ユーザーです', 1, 'ROLE_GENERAL')
+, ('user14@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー14', '2000-01-01', 44, 1, 'ユーザーです', 1, 'ROLE_GENERAL')
+, ('user15@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー15', '2000-01-01', 38, 1, 'ユーザーです', 1, 'ROLE_GENERAL')
+, ('user16@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー16', '2000-01-01', 25, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user17@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー17', '2000-01-01', 30, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user18@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー18', '2000-01-01', 50, 1, 'ユーザーです', 2, 'ROLE_GENERAL')
+, ('user19@co.jp', '$2a$10$rJyapIrvsHARwCNgporWLO6QIKXXezOpRrdb..7X0ea0VwZ5IldSy', 'ユーザー19', '2000-01-01', 43, 2, 'ユーザーです', 1, 'ROLE_GENERAL')
 ;
 
 /* 部署マスタ */
