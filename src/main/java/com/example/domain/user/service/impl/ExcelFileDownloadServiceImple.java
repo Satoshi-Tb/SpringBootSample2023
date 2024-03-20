@@ -21,6 +21,9 @@ import com.example.domain.user.service.ExcelFileDownloadService;
 
 @Service
 public class ExcelFileDownloadServiceImple implements ExcelFileDownloadService {
+	private static int MAX_CELL_CHAR_COUNT = 32767;
+	
+	
     public ByteArrayInputStream generateExcelFile() throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sample Sheet");
@@ -76,7 +79,7 @@ public class ExcelFileDownloadServiceImple implements ExcelFileDownloadService {
 
             Random random = new Random();
 
-            for (int rowNum = 0; rowNum < 100000; rowNum++) {
+            for (int rowNum = 0; rowNum < 1000; rowNum++) {
                 Row row = sheet.createRow(rowNum);
                 for (int colNum = 0; colNum < 20; colNum++) {
                     Cell cell = row.createCell(colNum);
@@ -85,6 +88,11 @@ public class ExcelFileDownloadServiceImple implements ExcelFileDownloadService {
                         // 3列目までは1000文字から10000文字のランダムな文字列を設定
                         int length = 1000 + random.nextInt(9000);
                         String value = generateRandomString(length);
+                        cell.setCellValue(value);
+                    } else if (colNum == 5) {
+                        // 列最大文字数テスト
+                        //String value = generateRandomString(MAX_CELL_CHAR_COUNT + 1);  // エラーになる
+                    	String value = generateRandomString(MAX_CELL_CHAR_COUNT);
                         cell.setCellValue(value);
                     } else {
                         // それ以外の列は100文字以下の文字列を設定
