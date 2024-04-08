@@ -42,6 +42,13 @@
     <result column="salary" property="salary" />
   </resultMap>
   
+    <!-- マッピング定義(給料) -->
+  <resultMap type="com.example.domain.user.model.FilterItem" id="filter">
+    <result column="filter_value" property="filterValue" />
+    <result column="filter_label" property="filterLabel" />
+    <result column="filter_count" property="count" />
+  </resultMap>
+  
   <!-- ユーザー1件登録 -->
   <insert id="insertOne">
     insert into m_user(
@@ -128,17 +135,17 @@
       left join m_department 
          on m_user.department_id = m_department.department_id
     <where>
-      <if test="userId != null">
-        m_user.user_id like '%' || #{userId} || '%'
+      <if test="condition.userId != null">
+        m_user.user_id like '%' || #{condition.userId} || '%'
       </if>
-      <if test="userName != null">
-        and m_user.user_name like '%' || #{userName} || '%'
+      <if test="condition.userName != null">
+        and m_user.user_name like '%' || #{condition.userName} || '%'
       </if>
-      <if test="gender != null">
-        and m_user.gender = #{gender}
+      <if test="condition.gender != null">
+        and m_user.gender = #{condition.gender}
       </if>
-      <if test="departmentId != null">
-        and m_department.department_id = #{departmentId}
+      <if test="condition.departmentId != null">
+        and m_department.department_id = #{condition.departmentId}
       </if>
     </where>
   </sql>
@@ -151,7 +158,7 @@
     order by
       m_user.department_id
       , m_user.user_id
-     LIMIT #{size} OFFSET #{offset}
+     LIMIT #{condition.size} OFFSET #{condition.offset}
   </select>
   
       <!-- 
@@ -162,6 +169,19 @@
     from (
 		<include refid="userList"/>
 	)
+  </select>
+  
+  <!-- フィルター検索用 -->
+  <select id="getFilterByGender" resultMap="filter">
+    select
+      gender as filter_value
+      , gender_name as filter_label
+      , count(*) as filter_count
+    from (
+      <include refid="userList"/>
+    )
+    group by gender
+    order by gender
   </select>
   
   <!-- ユーザー1件検索 -->

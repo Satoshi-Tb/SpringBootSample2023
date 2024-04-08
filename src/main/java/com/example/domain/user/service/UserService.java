@@ -21,7 +21,7 @@ public interface UserService {
 	public int getUsersByPaginationTotalCount(UserListCriteria condition);
 	
 	/** ユーザーフィルタ取得 */
-	public List<FilterItem> getUsersFilter(String filterName);
+	public List<FilterItem> getUsersFilter(String filterName, UserListCriteria condition);
 	
 	/** ユーザー取得（1件） */
 	public MUser getUserOne(String userId);

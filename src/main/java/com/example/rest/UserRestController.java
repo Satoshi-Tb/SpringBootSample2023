@@ -69,7 +69,7 @@ public class UserRestController {
 	public ResponseEntity<RestResponse<List<FilterItem>>> getUserListFilter(@PathVariable String filterName, @ModelAttribute UserListCriteria condition) {	
 		condition.setOffset(condition.getPage() * condition.getSize());
 
-		return RestResponse.createSuccessResponse(userService.getUsersFilter(filterName));
+		return RestResponse.createSuccessResponse(userService.getUsersFilter(filterName, condition));
 	}
 	
 	

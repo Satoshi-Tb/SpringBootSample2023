@@ -60,21 +60,29 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<FilterItem> getUsersFilter(String filterName) {
-		var list = new ArrayList<FilterItem>();
-		var item = new FilterItem();
-		item.setFilterValue("1");
-		item.setFilterLabel("男性");
-		item.setCount(10);
-		list.add(item);
-
-		var item2 = new FilterItem();
-		item2.setFilterValue("2");
-		item2.setFilterLabel("女性");
-		item2.setCount(5);
-		list.add(item2);
+	public List<FilterItem> getUsersFilter(String filterName, UserListCriteria condition) {
+//		var list = new ArrayList<FilterItem>();
+//		var item = new FilterItem();
+//		item.setFilterValue("1");
+//		item.setFilterLabel("男性");
+//		item.setCount(10);
+//		list.add(item);
+//
+//		var item2 = new FilterItem();
+//		item2.setFilterValue("2");
+//		item2.setFilterLabel("女性");
+//		item2.setCount(5);
+//		list.add(item2);
 		
-		return list;
+		// TODO フィルタ名から動的SQL生成にて汎用化。難しそう？範囲系には対応できないと思うので、結局のところ分けないとだめなような
+
+        switch (filterName) {
+	        case "gender":
+	    		return mapper.getFilterByGender(condition);
+	        case "departmentId":
+	        default:
+	        	return new ArrayList<FilterItem>();
+        }
 	}
 
 	/** ユーザー更新（１件） */
