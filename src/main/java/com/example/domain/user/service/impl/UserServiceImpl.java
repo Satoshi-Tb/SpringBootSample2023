@@ -59,27 +59,15 @@ public class UserServiceImpl implements UserService {
 		return mapper.findOne(userId);
 	}
 	
+	/** フィルタ結果取得 */
 	@Override
 	public List<FilterItem> getUsersFilter(String filterName, UserListCriteria condition) {
-//		var list = new ArrayList<FilterItem>();
-//		var item = new FilterItem();
-//		item.setFilterValue("1");
-//		item.setFilterLabel("男性");
-//		item.setCount(10);
-//		list.add(item);
-//
-//		var item2 = new FilterItem();
-//		item2.setFilterValue("2");
-//		item2.setFilterLabel("女性");
-//		item2.setCount(5);
-//		list.add(item2);
-		
-		// TODO フィルタ名から動的SQL生成にて汎用化。難しそう？範囲系には対応できないと思うので、結局のところ分けないとだめなような
-
+		//TODO フィルタサービスの口は1つにまとめられるとしても、SQLの共通化は難しそうかも
         switch (filterName) {
 	        case "gender":
 	    		return mapper.getFilterByGender(condition);
 	        case "departmentId":
+	    		return mapper.getFilterByDepartmentId(condition);
 	        default:
 	        	return new ArrayList<FilterItem>();
         }

@@ -183,6 +183,19 @@
     group by gender
     order by gender
   </select>
+
+  <!-- フィルター検索用 -->
+  <select id="getFilterByDepartmentId" resultMap="filter">
+    select
+      department_id as filter_value
+      , department_name as filter_label
+      , count(*) as filter_count
+    from (
+      <include refid="userList"/>
+    )
+    group by department_id
+    order by department_id
+  </select>
   
   <!-- ユーザー1件検索 -->
   <!-- resultMap: select結果とJavaクラスをマッピングするためのタグ -->

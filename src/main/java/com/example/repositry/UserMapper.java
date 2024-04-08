@@ -28,7 +28,11 @@ public interface UserMapper {
 	/** ユーザー取得（総件数） */
 	public int findManyByPaginationTotalCount(@Param("condition") UserListCriteria condition);
 	
+	/** フィルタ */
 	public List<FilterItem> getFilterByGender(@Param("condition") UserListCriteria condition);
+	
+	/** フィルタ */
+	public List<FilterItem> getFilterByDepartmentId(@Param("condition") UserListCriteria condition);
 	
 	/** ユーザー取得（1件） */
 	public MUser findOne(String userId);
