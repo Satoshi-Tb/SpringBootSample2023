@@ -3,6 +3,7 @@ package com.example.domain.user.service;
 import java.util.List;
 
 import com.example.domain.user.model.CustomMUser;
+import com.example.domain.user.model.FilterItem;
 import com.example.domain.user.model.MUser;
 
 public interface UserService {
@@ -18,6 +19,9 @@ public interface UserService {
 	
 	/** ユーザー取得(ページネーション)(総件数) */
 	public int getUsersByPaginationTotalCount(UserListCriteria condition);
+	
+	/** ユーザーフィルタ取得 */
+	public List<FilterItem> getUsersFilter(String filterName);
 	
 	/** ユーザー取得（1件） */
 	public MUser getUserOne(String userId);

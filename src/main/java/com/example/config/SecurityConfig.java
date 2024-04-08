@@ -21,8 +21,9 @@ public class SecurityConfig   {
 	 * */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//ログイン方法が分からなくなった
         http
-        	.formLogin(login -> login
+    		.formLogin(login -> login
 		        .loginProcessingUrl("/login")
 		        .loginPage("/login")
 		        .defaultSuccessUrl("/user/list", true)

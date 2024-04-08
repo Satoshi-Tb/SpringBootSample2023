@@ -1,6 +1,7 @@
 package com.example.rest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,10 +21,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.user.model.CustomMUser;
+import com.example.domain.user.model.FilterItem;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
@@ -64,11 +65,11 @@ public class UserRestController {
 	
 	
 	// TODO WIP
-	@GetMapping("/get/filter")
-	public ResponseEntity<UserListResponse> getUserListFilter(@RequestParam UserListCriteria condition) {	
+	@GetMapping("/get/filter/{filterName}")
+	public ResponseEntity<RestResponse<List<FilterItem>>> getUserListFilter(@PathVariable String filterName, @ModelAttribute UserListCriteria condition) {	
+		condition.setOffset(condition.getPage() * condition.getSize());
 
-		
-		return null;
+		return RestResponse.createSuccessResponse(userService.getUsersFilter(filterName));
 	}
 	
 	
