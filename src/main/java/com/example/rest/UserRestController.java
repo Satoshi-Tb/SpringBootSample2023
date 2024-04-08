@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,6 +63,15 @@ public class UserRestController {
 	}
 	
 	
+	// TODO WIP
+	@GetMapping("/get/filter")
+	public ResponseEntity<UserListResponse> getUserListFilter(@RequestParam UserListCriteria condition) {	
+
+		
+		return null;
+	}
+	
+	
 	@PostMapping("/get/list-pager")
 	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationPost(@RequestBody UserListCriteria condition) {	
 		condition.setOffset(condition.getPage() * condition.getSize());
@@ -69,7 +79,7 @@ public class UserRestController {
 	}
 	
 	@GetMapping("/get/list-pager")
-	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationGet(@RequestParam UserListCriteria condition) {	
+	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationGet(@ModelAttribute  UserListCriteria condition) {	
 		condition.setOffset(condition.getPage() * condition.getSize());
 		return getUserListByPagination(condition);
 	}

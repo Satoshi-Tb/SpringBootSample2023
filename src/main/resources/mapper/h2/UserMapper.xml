@@ -96,6 +96,12 @@
       <if test="userName != null">
         and m_user.user_name like '%' || #{userName} || '%'
       </if>
+      <if test="gender != null">
+        and m_user.gender = #{gender}
+      </if>
+      <if test="department_id != null">
+        and m_department.department_id = #{department_id}
+      </if>
     </where>
     order by
       m_user.department_id
@@ -127,6 +133,12 @@
       </if>
       <if test="userName != null">
         and m_user.user_name like '%' || #{userName} || '%'
+      </if>
+      <if test="gender != null">
+        and m_user.gender = #{gender}
+      </if>
+      <if test="departmentId != null">
+        and m_department.department_id = #{departmentId}
       </if>
     </where>
   </sql>
