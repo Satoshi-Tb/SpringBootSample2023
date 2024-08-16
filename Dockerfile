@@ -1,8 +1,9 @@
 # ベースイメージの選択（Alpine Linux）
 FROM openjdk:17-alpine
 
-# Mavenのインストール
-RUN apk add --no-cache maven
+# Maven, fontのインストール
+# fontはapache POI でSXSSFを扱うため
+RUN apk add --no-cache maven ttf-dejavu
 
 # 作業ディレクトリの設定
 WORKDIR /app
