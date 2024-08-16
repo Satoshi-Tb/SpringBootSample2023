@@ -25,7 +25,7 @@ public class ExcelFileDownloadServiceImple implements ExcelFileDownloadService {
 	
 	
     public ByteArrayInputStream generateExcelFile() throws IOException {
-        try (Workbook workbook = new XSSFWorkbook()) {
+        try (Workbook workbook = new SXSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sample Sheet");
             Row row = sheet.createRow(0);
             Cell cell = row.createCell(0);

@@ -1,10 +1,8 @@
-FROM amazonlinux
+# ベースイメージの選択（Alpine Linux）
+FROM openjdk:17-alpine
 
-# 必要なパッケージをインストール
-RUN yum update -y && \
-    yum install -y java-17-amazon-corretto-devel maven && \
-    yum clean all
-
+# Mavenのインストール
+RUN apk add --no-cache maven
 
 # 作業ディレクトリの設定
 WORKDIR /app
@@ -15,5 +13,9 @@ COPY . .
 # Mavenを使用してプロジェクトをパッケージ（JARファイルを生成）
 RUN mvn clean package
 
+
+# 環境変数の設定
+ENV JAVA_OPTS="-Dorg.apache.poi.ss.ignoreMissingFontSystem=true"
+
 # アプリケーションを実行
-CMD ["java", "-jar", "target/SpringBootSample2023-0.0.1-SNAPSHOT.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -jar target/SpringBootSample2023-0.0.1-SNAPSHOT.jar"]
