@@ -1,0 +1,33 @@
+services:
+  app:
+    image: spring-boot-sample-2023:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # DataSource
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.h2.Driver"
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+
+      SPRING_SQL_INIT_ENCODING: "UTF-8"
+      SPRING_SQL_INIT_MODE: "ALWAYS"
+      SPRING_SQL_INIT_SCHEMA_LOCATIONS: "classpath:schema.sql"
+      SPRING_SQL_INIT_DATA_LOCATIONS: "classpath:data.sql"
+
+      # H2DB
+      SPRING_H2_CONSOLE_ENABLED: ${SPRING_H2_CONSOLE_ENABLED}
+
+      # message
+      SPRING_MESSAGES_BASENAME: "i18n/messages,i18n/ValidationMessages"
+
+      # MyBatis
+      MYBATIS_MAPPER_LOCATIONS: "classpath*:/mapper/h2/*.xml"
+      MYBATIS_CONFIGURATION_MAP_UNDERSCORE_TO_CAMEL_CASE: "true"
+      MYBATIS_TYPE_ALIASES_PACKAGE: "com.example.domain.user.model"
+
+      # Log Level
+      LOGGING_LEVEL_COM_EXAMPLE: ${LOGGING_LEVEL_COM_EXAMPLE}

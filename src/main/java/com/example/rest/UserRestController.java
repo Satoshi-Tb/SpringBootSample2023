@@ -1,6 +1,7 @@
 package com.example.rest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -14,15 +15,16 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.user.model.CustomMUser;
+import com.example.domain.user.model.FilterItem;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
@@ -62,6 +64,15 @@ public class UserRestController {
 	}
 	
 	
+	// TODO WIP
+	@GetMapping("/get/filter/{filterName}")
+	public ResponseEntity<RestResponse<List<FilterItem>>> getUserListFilter(@PathVariable String filterName, @ModelAttribute UserListCriteria condition) {	
+		condition.setOffset(condition.getPage() * condition.getSize());
+
+		return RestResponse.createSuccessResponse(userService.getUsersFilter(filterName, condition));
+	}
+	
+	
 	@PostMapping("/get/list-pager")
 	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationPost(@RequestBody UserListCriteria condition) {	
 		condition.setOffset(condition.getPage() * condition.getSize());
@@ -69,7 +80,7 @@ public class UserRestController {
 	}
 	
 	@GetMapping("/get/list-pager")
-	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationGet(@RequestParam UserListCriteria condition) {	
+	public ResponseEntity<RestResponse<UserListPaginationResponse>> getUserListByPaginationGet(@ModelAttribute  UserListCriteria condition) {	
 		condition.setOffset(condition.getPage() * condition.getSize());
 		return getUserListByPagination(condition);
 	}

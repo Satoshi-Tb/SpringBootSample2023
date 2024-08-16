@@ -1,5 +1,6 @@
 package com.example.domain.user.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.user.model.CustomMUser;
+import com.example.domain.user.model.FilterItem;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
@@ -56,9 +58,21 @@ public class UserServiceImpl implements UserService {
 	public MUser getUserOne(String userId) {
 		return mapper.findOne(userId);
 	}
+	
+	/** フィルタ結果取得 */
+	@Override
+	public List<FilterItem> getUsersFilter(String filterName, UserListCriteria condition) {
+		//TODO フィルタサービスの口は1つにまとめられるとしても、SQLの共通化は難しそうかも
+        switch (filterName) {
+	        case "gender":
+	    		return mapper.getFilterByGender(condition);
+	        case "departmentId":
+	    		return mapper.getFilterByDepartmentId(condition);
+	        default:
+	        	return new ArrayList<FilterItem>();
+        }
+	}
 
-	
-	
 	/** ユーザー更新（１件） */
 	// @Transactionalのアノテーションが付いたメソッド内で例外が発生すると自動でロールバックされる。
 	// ロールバック対象は、デフォルトではスローされた例外が RuntimeException のインスタンスまたはサブクラスである場合です。(Error インスタンスもデフォルトでロールバックします)。

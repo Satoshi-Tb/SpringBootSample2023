@@ -7,7 +7,9 @@ import lombok.Data;
 public class UserListCriteria {
     private String userId;
     private String userName;
-
+    private Integer gender;
+    private Integer departmentId;
+    
     private Integer offset;
     
     @NotNull
@@ -15,4 +17,6 @@ public class UserListCriteria {
     
     @NotNull
     private Integer size;
+    
+    
 }

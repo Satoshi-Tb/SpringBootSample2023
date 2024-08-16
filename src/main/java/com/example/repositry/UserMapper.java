@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.example.domain.user.model.FilterItem;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 
@@ -22,10 +23,16 @@ public interface UserMapper {
 	public List<MUser> findMany(MUser user);
 	
 	/** ユーザー取得 */
-	public List<MUser> findManyByPagination(UserListCriteria condition);
+	public List<MUser> findManyByPagination(@Param("condition") UserListCriteria condition);
 	
 	/** ユーザー取得（総件数） */
-	public int findManyByPaginationTotalCount(UserListCriteria condition);
+	public int findManyByPaginationTotalCount(@Param("condition") UserListCriteria condition);
+	
+	/** フィルタ */
+	public List<FilterItem> getFilterByGender(@Param("condition") UserListCriteria condition);
+	
+	/** フィルタ */
+	public List<FilterItem> getFilterByDepartmentId(@Param("condition") UserListCriteria condition);
 	
 	/** ユーザー取得（1件） */
 	public MUser findOne(String userId);
