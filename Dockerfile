@@ -1,10 +1,8 @@
-FROM amazonlinux
+# ベースイメージの選択（Alpine Linux）
+FROM openjdk:17-alpine
 
-# 必要なパッケージをインストール
-RUN yum update -y && \
-    yum install -y java-17-amazon-corretto-devel maven && \
-    yum clean all
-
+# Mavenのインストール
+RUN apk add --no-cache maven
 
 # 作業ディレクトリの設定
 WORKDIR /app

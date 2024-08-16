@@ -16,7 +16,7 @@ public class ErrorAspect {
     @AfterThrowing(value = "execution(* *..*..*(..)) && (bean(*Controller) || bean(*Service) || bean(*Repository))",
             throwing = "ex")
 	public void throwingNull(DataAccessException ex) {
-		log.error("DataAccessExceptionが発生しました");
-		ex.printStackTrace();
+//		log.error("DataAccessExceptionが発生しました");
+//		ex.printStackTrace();
 	}
 }

@@ -54,6 +54,10 @@ public class LogAspect {
         } catch (Exception e) {
             // エラーログ出力
             log.error("メソッド異常終了: " + jp.getSignature());
+            if (e !=  null) {
+                log.error("", e);  	
+            }
+
 
             // エラーの再スロー
             throw e;
