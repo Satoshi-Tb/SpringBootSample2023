@@ -9,5 +9,15 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+        stage ('input') {
+            timeout(time:3, unit:'DAYS') {
+                input message: 'Do you want to deploy to staging?', ok: 'Yes, let\'s do it!'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'echo deploy!'
+            }
+        }
     }
 }
