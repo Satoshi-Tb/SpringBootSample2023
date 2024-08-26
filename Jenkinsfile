@@ -10,15 +10,14 @@ pipeline {
             }
         }
         stage ('input') {
-            input {
-                message "What is your first name?"
-                ok "Submit"
-                parameters {
-                  string(defaultValue: 'Dave', name: 'FIRST_NAME', trim: true) 
+            steps {
+                input {
+                    message "What is your first name?"
+                    ok "Submit"
+                    parameters {
+                      string(defaultValue: 'Dave', name: 'FIRST_NAME', trim: true) 
+                    }
                 }
-            }
-            options {
-                timeout(time: 10, unit: 'SECONDS') 
             }
         }
         stage('Deploy') {
