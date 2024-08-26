@@ -11,13 +11,7 @@ pipeline {
         }
         stage ('input') {
             steps {
-                input {
-                    message "What is your first name?"
-                    ok "Submit"
-                    parameters {
-                      string(defaultValue: 'Dave', name: 'FIRST_NAME', trim: true) 
-                    }
-                }
+                input message: 'Do you want to deploy to staging?', ok: 'Yes, let\'s do it!'
             }
         }
         stage('Deploy') {
