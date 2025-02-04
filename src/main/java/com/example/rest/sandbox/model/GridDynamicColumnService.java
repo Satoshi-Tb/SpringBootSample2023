@@ -14,7 +14,7 @@ import com.example.rest.sandbox.model.GridDynamicColumnModel.RowDataV3;
 @Service
 public class GridDynamicColumnService {
 	public List<ColumnDefinition>getColumnDefinitions(String id) {
-		if (id == "1") {
+		if (id.equals("1")) {
 			return List.of(
 				new ColumnDefinition("freeItem1", "itemId", "商品ID",  "1", null),
 				new ColumnDefinition("freeItem2", "unit", "単位", "1", null),
@@ -36,12 +36,16 @@ public class GridDynamicColumnService {
 						new Option("genreOption", "4", "料理"),
 						new Option("genreOption", "5", "その他")
 						)),
-				new ColumnDefinition("freeItem4", "price", "価格", "1", null)
+				new ColumnDefinition("freeItem4", "price", "価格", "1", null),
+				new ColumnDefinition("freeItem5", "hasEbookFormat", "電子書籍の有無", "3", List.of(
+						new Option("hasEbookFormatOption", "0", "なし"),
+						new Option("hasEbookFormatOption", "1", "あり")
+				))
 			);
 	}
 	
 	public List<RowData> getRowData(String id) {
-		if (id == "1") {
+		if (id.equals("1")) {
 			return List.of(
 					new RowData("1", "野菜", "キャベツ", List.of(
 							new DetailItem("101", "freeItem1", "itemId", "11"),
@@ -68,15 +72,17 @@ public class GridDynamicColumnService {
 				new RowData("1", "書籍", "小説", List.of(
 						new DetailItem("111", "freeItem1", "title", "吾輩は猫である"),
 						new DetailItem("112", "freeItem2", "authro", "夏目漱石"),
-						new DetailItem("113", "freeItem3", "price", "700"),
-						new DetailItem("114", "freeItem4", "ジャンル", "1")
+						new DetailItem("113", "freeItem3", "genre", "1"),
+						new DetailItem("114", "freeItem4", "price", "700"),
+						new DetailItem("115", "freeItem5", "hasEbookFormat", "1")
 				)),
-				new RowData("1", "書籍", "技術書", List.of(
+				new RowData("2", "書籍", "技術書", List.of(
 						new DetailItem("211", "freeItem1", "title", "詳解Java言語"),
 						new DetailItem("212", "freeItem2", "authro", "JVM"),
-						new DetailItem("213", "freeItem3", "price", "3800"),
-						new DetailItem("214", "freeItem4", "ジャンル", "3")
-				))
+						new DetailItem("213", "freeItem3", "genre", "3"),
+						new DetailItem("214", "freeItem4", "price", "3800"),
+						new DetailItem("215", "freeItem5", "hasEbookFormat", "0")
+						))
 			);
 	}
 	
