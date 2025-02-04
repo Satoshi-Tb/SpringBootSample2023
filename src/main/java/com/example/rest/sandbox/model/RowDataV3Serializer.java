@@ -2,8 +2,8 @@ package com.example.rest.sandbox.model;
 
 
 import java.io.IOException;
+import java.util.Map;
 
-import com.example.rest.sandbox.model.GridDynamicColumnModel.DetailItemSub;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowDataV3;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -24,7 +24,11 @@ public class RowDataV3Serializer extends JsonSerializer<RowDataV3> {
 
         // detailItems のキーと値をトップレベルに展開
         for (var entry : rowData.detailItems()) {
-            gen.writeObjectField(entry.gridFieldName(), new DetailItemSub(entry.id(), entry.fieldName(), entry.value()));
+            gen.writeObjectField(entry.gridFieldName(), Map.of(
+            		"id", entry.id(),
+            		"fieldName", entry.fieldName(),
+            		"value", entry.value()
+            		));
         }
 
         gen.writeEndObject();

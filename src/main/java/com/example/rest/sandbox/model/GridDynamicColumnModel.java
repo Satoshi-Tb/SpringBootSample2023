@@ -15,6 +15,4 @@ public class GridDynamicColumnModel {
 	
 	@JsonSerialize(using = RowDataV3Serializer.class)
 	public record RowDataV3(String id, String category, String item, List<DetailItem> detailItems) {};
-	public record DetailItemSub(String id, String fieldName, String value) {};
-
 }
