@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS m_user (
   , department_id INT
   , role VARCHAR(50)
   , ins_user_id VARCHAR(50)
-  , ins_date DATE
+  , ins_date TIMESTAMP
   , upd_user_id VARCHAR(50)
-  , upd_date DATE
+  , upd_date TIMESTAMP
 );
 
 /* 部署マスタ */

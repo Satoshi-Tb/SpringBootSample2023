@@ -20,4 +20,8 @@ public class MUser {
     private String role;
     private Department department;
     private List<Salary> salaryList;
+    private String insUserId;
+    private Date insDate;
+    private String updUserId;
+    private Date updDate;
 }

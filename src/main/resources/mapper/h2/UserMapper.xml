@@ -25,6 +25,10 @@
     <result column="profile" property="profile" />
     <result column="department_id" property="departmentId" />
     <result column="role" property="role" />
+    <result column="ins_user_id" property="insUserId" />  
+    <result column="ins_date" property="insDate" />  
+    <result column="upd_user_id" property="updUserId" />  
+    <result column="upd_date" property="updDate" />  
     <association property="department" resultMap="department"/>
     <collection property="salaryList" resultMap="salary" columnPrefix="salary_"/>
   </resultMap>
@@ -92,6 +96,10 @@
       , m_user.profile
       , m_user.department_id
       , m_department.department_name
+      , m_user.ins_user_id
+      , m_user.ins_date
+      , m_user.upd_user_id
+      , m_user.upd_date
     from
       m_user
       left join m_department 
@@ -130,6 +138,10 @@
       , m_user.profile
       , m_user.department_id
       , m_department.department_name
+      , m_user.ins_user_id
+      , m_user.ins_date
+      , m_user.upd_user_id
+      , m_user.upd_date
     from
       m_user
       left join m_department 
