@@ -16,6 +16,10 @@ CREATE TABLE IF NOT EXISTS m_user (
   , profile VARCHAR(200)
   , department_id INT
   , role VARCHAR(50)
+  , ins_user_id VARCHAR(50)
+  , ins_date DATE
+  , upd_user_id VARCHAR(50)
+  , upd_date DATE
 );
 
 /* 部署マスタ */

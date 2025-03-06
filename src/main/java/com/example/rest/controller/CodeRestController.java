@@ -1,4 +1,4 @@
-package com.example.rest;
+package com.example.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
