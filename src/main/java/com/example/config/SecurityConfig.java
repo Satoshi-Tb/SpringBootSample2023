@@ -44,11 +44,13 @@ public class SecurityConfig   {
 		    .logout(logout ->logout
 	    		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 	    		.logoutUrl("/logout")
-	            .logoutSuccessUrl("/login?logout")
-	        );
+	            .logoutSuccessUrl("/login?logout"))
+            .csrf(csrf -> csrf.disable())
+            // H2コンソール用にX-Frame-Optionsを無効化
+            .headers(headers -> headers.frameOptions().disable());        
         
-        //CSRF対策を無効に設定（一時的）
-        http.csrf().disable();
+//        //CSRF対策を無効に設定（一時的）
+//        http.csrf().disable();
         
         return http.build();
 	}
