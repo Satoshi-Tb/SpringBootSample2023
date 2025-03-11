@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public void deleteUsers(List<String> userIdList) {
-		mapper.deleteUsers(userIdList);
+		mapper.deleteUsersByInClause(userIdList);
 	}
 
 	@Override

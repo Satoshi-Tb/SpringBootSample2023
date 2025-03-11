@@ -56,6 +56,6 @@ public interface UserMapper {
     public int deleteOne(@Param("userId") String userId);
 
     /** 複数ユーザー削除 */
-    public int deleteUsers(List<String> userIds);
+    public int deleteUsersByInClause(List<String> userIds);
 
 }
