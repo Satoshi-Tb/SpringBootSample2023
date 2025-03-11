@@ -306,4 +306,18 @@
     where
       user_id = #{userId}
   </delete>
+  
+  <!-- 複数ユーザー削除 -->
+  <delete id="deleteUsers">
+  	delete from
+  		m_user
+    <where>
+        <if test="userIds != null and userIds.size() > 0">
+            user_id in
+            <foreach item="userId" collection="userIds" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+        </if>
+    </where>
+  </delete>
 </mapper>
