@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,6 +49,20 @@ public class ExcelFileDownloadController {
     
     @GetMapping("/userlist")
     public ResponseEntity<byte[]> downloadUserList() throws IOException {
+		List<MUser> userList = userService.getUsers(null);
+		
+        ByteArrayInputStream in = excelFileSampleService.generateUserListExcel(userList);
+        
+        byte[] content = in.readAllBytes();
+
+        HttpHeaders headers = createHeaders("userlist.xlsx");
+
+        return new ResponseEntity<>(content, headers, HttpStatus.OK);
+    }
+    
+    
+    @PostMapping("/userlist2")
+    public ResponseEntity<byte[]> downloadUserListByPost() throws IOException {
 		List<MUser> userList = userService.getUsers(null);
 		
         ByteArrayInputStream in = excelFileSampleService.generateUserListExcel(userList);
