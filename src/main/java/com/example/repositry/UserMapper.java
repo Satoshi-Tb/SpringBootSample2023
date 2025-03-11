@@ -55,7 +55,10 @@ public interface UserMapper {
     /** ユーザー削除(1件) */
     public int deleteOne(@Param("userId") String userId);
 
-    /** 複数ユーザー削除 */
+    /** 複数ユーザー削除(IN句版) */
     public int deleteUsersByInClause(List<String> userIds);
+
+    /** 複数ユーザー削除(UNION ALL版) */
+    public int deleteUsersByUnionClause(List<String> userIds);
 
 }

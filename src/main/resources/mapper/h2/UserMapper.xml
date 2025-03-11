@@ -307,8 +307,8 @@
       user_id = #{userId}
   </delete>
   
-  <!-- 複数ユーザー削除 -->
-  <delete id="deleteUsers">
+  <!-- 複数ユーザー削除(IN句版) -->
+  <delete id="deleteUsersByInClause">
   	delete from
   		m_user
     <where>
@@ -317,6 +317,29 @@
             <foreach item="userId" collection="userIds" open="(" separator="," close=")">
                 #{userId}
             </foreach>
+        </if>
+    </where>
+  </delete>
+  
+  <!-- 
+  	複数ユーザー削除(IN句制限回避版
+  	select 要素 結果を、UNION ALLでつないだSQLを試したかったが、H2データベースの場合
+  	select 要素の要素部分のプレースホルダを置換できないので、H2専用構文で対応
+   -->
+  <delete id="deleteUsersByUnionClause">
+  	delete from
+  		m_user
+    <where>
+        <if test="userIds != null and userIds.size() > 0">
+        	EXISTS (
+		        SELECT 1 FROM (
+		            VALUES
+		            <foreach collection="userIds" item="userId" separator=",">
+		                (#{userId})
+		            </foreach>
+		        ) AS temp(USER_ID)
+		        WHERE temp.USER_ID = m_user.user_id
+       		)
         </if>
     </where>
   </delete>
