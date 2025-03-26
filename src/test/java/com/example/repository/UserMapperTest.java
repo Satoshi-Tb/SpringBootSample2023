@@ -21,10 +21,10 @@ import com.example.repositry.UserMapper;
 // MyBatisTestを指定すると、自動的にTransactionalが有効になる
 // テストが終わったら自動的にRollbackされるのでクリーンアップは不要
 @MybatisTest
-// resources配下のパスを指定する場合は、classpath文字を指定
-//@Sql("classpath:sql/insert_m_user.sql")
-//resources配下にクラスパスフォルダを作成すると、相対パス指定が可能
-@Sql("UserMapperTest_insert_m_user.sql")
+@Sql({
+	"classpath:sql/dept_common.sql",       // 共通テスト用SQL。resources配下のパスを指定する場合は、classpath文字を指定
+	"UserMapperTest_insert_m_user.sql"   // 個別テスト用SQL。クラスパス上に作成すれば、相対パス指定可能
+})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) 
 @DisplayName("UserMapperTest")
 class UserMapperTest {
