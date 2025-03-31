@@ -18,9 +18,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.user.model.MUser;
@@ -48,6 +50,9 @@ class UserServiceDBUnitTest {
     @Autowired
     private DataSource dataSource;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+    
     private IDatabaseTester databaseTester;
     
     @BeforeEach
@@ -94,9 +99,33 @@ class UserServiceDBUnitTest {
         expected.setProfile("ユーザーです");
         expected.setBirthday(SDF.parse("2000/01/01 00:00:00"));
         expected.setSalaryList(new ArrayList<Salary>());
+        expected.setRole("ROLE_GENERAL");
         assertThat(user).isEqualTo(expected);
     }
 
-    
+    @Test
+    @DisplayName("signup: ユーザー登録できること")
+    void test_signUp_1() throws Exception {
+    	var registerUser = new MUser();
+    	registerUser.setId("userX@co.jp");
+    	registerUser.setUserId("userX@co.jp");
+    	registerUser.setPassword("password");
+    	registerUser.setUserName("ユーザーX");
+    	registerUser.setBirthday(SDF.parse("1988/12/03 00:00:00"));
+    	registerUser.setAge(37);
+    	registerUser.setGender(1);
+    	registerUser.setProfile("ユーザーXのプロファイル");
+    	
+    	// ユーザー作成
+    	service.signup(registerUser);
+    	
+    	var expectedUser = new MUser();
+    	BeanUtils.copyProperties(registerUser, expectedUser);
+    	expectedUser.setDepartmentId(null);
+    	expectedUser.setSalaryList(new ArrayList<Salary>());
+    	
+        var actual = service.getUserOne("userX@co.jp");
+        assertThat(actual).isEqualTo(expectedUser);
+    }
     
 }

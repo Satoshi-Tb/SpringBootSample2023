@@ -221,6 +221,7 @@
       , m_user.age
       , m_user.gender
       , m_user.profile
+      , m_user.role
       , m_department.department_id
       , m_department.department_name
       , t_salary.user_id as salary_user_id
