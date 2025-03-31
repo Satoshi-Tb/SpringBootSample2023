@@ -9,10 +9,13 @@ import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
+import org.dbunit.Assertion;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.csv.CsvDataSet;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,6 +122,29 @@ class UserServiceDBUnitTest {
     	// ユーザー作成
     	service.signup(registerUser);
     	
+        /*
+         * 更新結果（＝データベース状態を）、期待値CSVと比較検証
+         */
+        IDataSet databaseDataSet = databaseTester.getConnection().createDataSet();
+        ITable actualTable = databaseDataSet.getTable("m_user");
+        
+        // 期待値のCSVデータセット
+        IDataSet expectedDataSet = new CsvDataSet(new File(EXPECT_DATA_PATH));
+        ITable expectedTable = expectedDataSet.getTable("m_user");
+        
+        // 比較対象外のカラム定義
+        // TODO 追加した値が読み取れない
+        ITable filteredActualTable = DefaultColumnFilter.excludedColumnsTable(
+                actualTable, new String[]{"password", "ins_date", "ins_user_id", "upd_date", "upd_user_id"});
+        ITable filteredExpectedTable = DefaultColumnFilter.excludedColumnsTable(
+                expectedTable, new String[]{"password", "ins_date", "ins_user_id", "upd_date", "upd_user_id"});
+        
+        // 比較・検証
+        Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
+    	
+        /*
+         * 更新結果をピックアップして、検証
+         */
     	var expectedUser = new MUser();
     	BeanUtils.copyProperties(registerUser, expectedUser);
     	expectedUser.setDepartmentId(null);
