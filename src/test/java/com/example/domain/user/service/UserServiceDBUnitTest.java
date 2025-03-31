@@ -3,19 +3,18 @@ package com.example.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
+import org.dbunit.DataSourceDatabaseTester;
+import org.dbunit.IDatabaseTester;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,22 +48,30 @@ class UserServiceDBUnitTest {
     @Autowired
     private DataSource dataSource;
 
+    private IDatabaseTester databaseTester;
+    
     @BeforeEach
-    void setUp() throws DatabaseUnitException, SQLException {
-    	// テストケースごとに、テストデータ登録が実施される
-        try (Connection conn = dataSource.getConnection()) {
-            DatabaseConnection dbConn = new DatabaseConnection(conn);
-
-            // CSV フォルダからデータを取得
-            // 「テーブル名」.csvでファイルを用意
-            // 読込順はtable-ordering.txtで指定
-            IDataSet dataSet = new CsvDataSet(new File(INIT_DATA_PATH));
-
-            // 既存のデータをクリアし、新しいデータを挿入（delete-insert）
-            DatabaseOperation.CLEAN_INSERT.execute(dbConn, dataSet);
-        }
+    void setUp() throws Exception {
+        // DataSourceを使ってIDatabaseTesterを初期化
+        databaseTester = new DataSourceDatabaseTester(dataSource);
+        
+        // 初期データセット（CSV）の準備
+        IDataSet dataSet = new CsvDataSet(new File(INIT_DATA_PATH));
+        
+        // データベース操作の設定（初期データで入れ替え）
+        databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
+        databaseTester.setDataSet(dataSet);
+        
+        // セットアップの実行
+        databaseTester.onSetup();
     }
-
+    
+    @AfterEach
+    public void tearDown() throws Exception {
+        // テスト後のクリーンアップ
+        databaseTester.onTearDown();
+    }
+    
     @Test
 	@DisplayName("getUserOne: 指定したIDのユーザーが取得できること")
     void test_getUserOne_1() throws ParseException {
@@ -90,4 +97,6 @@ class UserServiceDBUnitTest {
         assertThat(user).isEqualTo(expected);
     }
 
+    
+    
 }
