@@ -3,6 +3,7 @@ package com.example.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.domain.user.model.MUser;
+
 //ServiceのDIを有効にするため、SpringBootTestを指定する。WebEnvironment.NONEを指定することで、Webまわりのコンフィグレーションを無効にする
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Sql({
@@ -24,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayName("UserServiceとUserMapperのインテグレーションテスト")
 class UserServiceText {
 
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	
 	@Autowired
 	private UserService service;
 	
@@ -54,8 +59,8 @@ class UserServiceText {
 	}
 
 	@Test
-	@DisplayName("insertOne: 1件ユーザーを追加できること")
-	void test_insertOne() throws ParseException {
+	@DisplayName("updateUserOne: 1件ユーザーを更新できること")
+	void test_updateUserOne() throws ParseException {
 		service.updateUserOne("user1@co.jp", "passwordX", "ユーザー名変更");
 
 		var result = service.getUserOne("user1@co.jp");
@@ -66,5 +71,29 @@ class UserServiceText {
 		assertThat(result.getUserName()).isEqualTo("ユーザー名変更");
 		// assertThat(result.getPassword()).isEqualTo(expectedPasswd);  // エンコード済パスワード
 	}
+	
+    @Test
+    @DisplayName("signup: ユーザー登録できること")
+    void test_signUp_1() throws Exception {
+    	var registerUser = new MUser();
+    	registerUser.setId("userX@co.jp");
+    	registerUser.setUserId("userX@co.jp");
+    	registerUser.setPassword("password");
+    	registerUser.setUserName("ユーザーX");
+    	registerUser.setBirthday(SDF.parse("1988/12/03 00:00:00"));
+    	registerUser.setAge(37);
+    	registerUser.setGender(1);
+    	registerUser.setProfile("ユーザーXのプロファイル");
+    	
+    	// ユーザー作成
+    	service.signup(registerUser);
+    	
+        /*
+         * 更新結果をピックアップして、検証
+         */  	
+        var actual = service.getUserOne("userX@co.jp");
+		assertThat(actual).isNotNull();
+		assertThat(actual.getUserName()).isEqualTo("ユーザーX");
+    }
 	
 }
