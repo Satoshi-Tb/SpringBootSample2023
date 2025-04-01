@@ -1,0 +1,4 @@
+user_id, password,user_name,birthday,age,gender,profile,department_id,role,ins_user_id,ins_date,upd_user_id,upd_date
+system1@co.jp,$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG,システム管理者,2000-01-01, 21,1,システム管理者です,1,ROLE_ADMIN,system1@co.jp,2025-03-01,system1@co.jp,2025-04-01
+user1@co.jp,$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG,ユーザー1,2000-01-01,21,2,ユーザーです,2,ROLE_GENERAL,system1@co.jp,2025-03-03,system1@co.jp, 2025-03-21
+userX@co.jp,$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG,ユーザーX,1988-12-03,37,1,ユーザーXです,2,ROLE_GENERAL,system1@co.jp,2025-03-03,system1@co.jp, 2025-03-21
