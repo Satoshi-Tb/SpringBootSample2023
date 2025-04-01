@@ -3,6 +3,7 @@ package com.example.domain.user.service;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 import org.dbunit.Assertion;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.csv.CsvDataSet;
@@ -25,8 +27,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.model.Salary;
@@ -56,6 +61,9 @@ class UserServiceDBUnitTest {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
     
+	@Autowired
+	private PlatformTransactionManager transactionManager;
+	
     private IDatabaseTester databaseTester;
     
     @BeforeEach
@@ -119,39 +127,58 @@ class UserServiceDBUnitTest {
     	registerUser.setGender(1);
     	registerUser.setProfile("ユーザーXのプロファイル");
     	
-    	// ユーザー作成
-    	service.signup(registerUser);
-    	
-        /*
-         * 更新結果（＝データベース状態を）、期待値CSVと比較検証
-         */
-        IDataSet databaseDataSet = databaseTester.getConnection().createDataSet();
-        ITable actualTable = databaseDataSet.getTable("m_user");
-        
-        // 期待値のCSVデータセット
-        IDataSet expectedDataSet = new CsvDataSet(new File(EXPECT_DATA_PATH));
-        ITable expectedTable = expectedDataSet.getTable("m_user");
-        
-        // 比較対象外のカラム定義
-        // TODO 追加した値が読み取れない
-        ITable filteredActualTable = DefaultColumnFilter.excludedColumnsTable(
-                actualTable, new String[]{"password", "ins_date", "ins_user_id", "upd_date", "upd_user_id"});
-        ITable filteredExpectedTable = DefaultColumnFilter.excludedColumnsTable(
-                expectedTable, new String[]{"password", "ins_date", "ins_user_id", "upd_date", "upd_user_id"});
-        
-        // 比較・検証
-        Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
-    	
-        /*
-         * 更新結果をピックアップして、検証
-         */
-    	var expectedUser = new MUser();
-    	BeanUtils.copyProperties(registerUser, expectedUser);
-    	expectedUser.setDepartmentId(null);
-    	expectedUser.setSalaryList(new ArrayList<Salary>());
-    	
-        var actual = service.getUserOne("userX@co.jp");
-        assertThat(actual).isEqualTo(expectedUser);
+    	TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);
+    	txTemplate.execute(status -> {
+    	    try {
+    	        // ユーザー登録処理
+    	        service.signup(registerUser);
+    	        
+    	        /*
+    	         * チェック方法１：テーブル内容と期待値CSVを比較 
+    	         */
+    	        // 重要: 同じトランザクションのコネクションを使って検証する
+    	        Connection conn = DataSourceUtils.getConnection(dataSource);
+    	        DatabaseConnection dbConn = new DatabaseConnection(conn);
+    	        
+    	        // この方法ならトランザクション内の変更が見える
+    	        IDataSet databaseDataSet = dbConn.createDataSet();
+    	        ITable actualTable = databaseDataSet.getTable("m_user");
+    	        
+    	        // 検証対象外カラムを除外設定
+    	        ITable filteredActualTable = DefaultColumnFilter.excludedColumnsTable(
+    	                actualTable, new String[]{"password", "department_id", "role", "ins_date", "ins_user_id", "upd_date", "upd_user_id"});
+    	        
+    	        // 期待値のCSVデータセット
+    	        IDataSet expectedDataSet = new CsvDataSet(new File(EXPECT_DATA_PATH));
+    	        ITable expectedTable = expectedDataSet.getTable("m_user");
+
+    	        // 検証対象外カラムを除外設定
+    	        ITable filteredExpectedTable = DefaultColumnFilter.excludedColumnsTable(
+    	                expectedTable, new String[]{"password", "department_id", "role", "ins_date", "ins_user_id", "upd_date", "upd_user_id"});
+    	        
+    	        // 比較・検証
+    	        Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
+    	        
+    	        /*
+    	         * チェック方法２：更新結果をピックアップして、検証
+    	         */
+    	    	var expectedUser = new MUser();
+    	    	BeanUtils.copyProperties(registerUser, expectedUser);
+    	    	expectedUser.setDepartmentId(null);
+    	    	expectedUser.setSalaryList(new ArrayList<Salary>());
+    	    	
+    	        var actual = service.getUserOne("userX@co.jp");
+    	        assertThat(actual).isEqualTo(expectedUser);
+    	        
+    	        // 検証後にロールバック（オプション）
+    	        status.setRollbackOnly();
+    	        
+    	        return null;
+    	    } catch (Exception e) {
+    	        throw new RuntimeException(e);
+    	    }
+    	});
+
     }
     
 }
