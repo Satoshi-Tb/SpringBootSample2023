@@ -170,6 +170,37 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!--  Mavenでテストを行うためのプラグイン -->
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-surefire-plugin</artifactId>
+			  <configuration>
+			    <argLine>@{argLine} -Dfile.encoding=UTF-8</argLine>
+			  </configuration>
+			</plugin>
+			<!--  カバレッジレポート用のプラグイン -->
+			<plugin>
+		      <groupId>org.jacoco</groupId>
+		      <artifactId>jacoco-maven-plugin</artifactId>
+		      <version>0.8.11</version>
+		      <executions>
+		        <!-- テスト実行前にJaCoCoエージェントを準備 -->
+		        <execution>
+		          <id>prepare-agent</id>
+		          <goals>
+		            <goal>prepare-agent</goal>
+		          </goals>
+		        </execution>
+		        <!-- テスト後にレポートを生成 -->
+		        <execution>
+		          <id>report</id>
+		          <phase>test</phase>
+		          <goals>
+		            <goal>report</goal>
+		          </goals>
+		        </execution>
+		      </executions>
+		    </plugin>
 		</plugins>
 	</build>
 
