@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +40,7 @@ class UserServiceText {
 	void setUp() throws Exception {
 	}
 
+	@Tag("SQL")
 	@Test
 	@DisplayName("getUserOne: 指定したIDのユーザーが取得できること")
 	void test_getUserOne_1() {
@@ -49,7 +51,8 @@ class UserServiceText {
 		assertThat(user.getAge()).isEqualTo(21);
 		assertThat(user.getBirthday()).isEqualTo("2000-01-01");
 	}
-	
+
+	@Tag("SQL")
 	@Test
 	@DisplayName("getUserOne: 存在しないユーザーの場合、Nullが取得できること")
 	void test_getUserOne_2() {
@@ -58,6 +61,7 @@ class UserServiceText {
 		assertThat(user).isNull();
 	}
 
+	@Tag("SQL")
 	@Test
 	@DisplayName("updateUserOne: 1件ユーザーを更新できること")
 	void test_updateUserOne() throws ParseException {
@@ -72,6 +76,7 @@ class UserServiceText {
 		// assertThat(result.getPassword()).isEqualTo(expectedPasswd);  // エンコード済パスワード
 	}
 	
+	@Tag("SQL")
     @Test
     @DisplayName("signup: ユーザー登録できること")
     void test_signUp_1() throws Exception {

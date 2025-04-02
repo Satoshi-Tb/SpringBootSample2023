@@ -22,6 +22,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,9 @@ class UserServiceDBUnitTest {
         databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
         databaseTester.setDataSet(dataSet);
         
+        // テスト終了時にデータ削除
+        databaseTester.setTearDownOperation(DatabaseOperation.DELETE_ALL);
+        
         // セットアップの実行
         databaseTester.onSetup();
     }
@@ -87,7 +91,8 @@ class UserServiceDBUnitTest {
         // テスト後のクリーンアップ
         databaseTester.onTearDown();
     }
-    
+
+    @Tag("DBUnit")
     @Test
 	@DisplayName("getUserOne: 指定したIDのユーザーが取得できること")
     void test_getUserOne_1() throws ParseException {
@@ -114,6 +119,7 @@ class UserServiceDBUnitTest {
         assertThat(user).isEqualTo(expected);
     }
 
+    @Tag("DBUnit")
     @Test
     @DisplayName("signup: ユーザー登録できること")
     void test_signUp_1() throws Exception {

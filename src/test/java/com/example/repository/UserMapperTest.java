@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ class UserMapperTest {
 	void setUp() throws Exception {
 	}
 
+    @Tag("SQL")
 	@Test
 	@DisplayName("findeOne: 指定したIDのユーザーが取得できること")
 	void test_findOne() {
@@ -46,7 +48,8 @@ class UserMapperTest {
 		assertThat(user.getAge()).isEqualTo(21);
 		assertThat(user.getBirthday()).isEqualTo("2000-01-01");
 	}
-	
+
+    @Tag("SQL")
 	@Test
 	@DisplayName("findManyByPagination: 指定した条件のユーザーが取得できること（全件取得）")
 	void test_findManyByPagination() {
@@ -62,6 +65,7 @@ class UserMapperTest {
 		assertThat(users.size()).isEqualTo(21);
 	}
 	
+    @Tag("SQL")
 	@Test
 	@DisplayName("insertOne: 1件ユーザーを追加できること")
 	void test_insertOne() throws ParseException {

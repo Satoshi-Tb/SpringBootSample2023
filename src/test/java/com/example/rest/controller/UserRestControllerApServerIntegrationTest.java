@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ class UserRestControllerApServerIntegrationTest {
 	void setUp() throws Exception {
 	}
 
+    @Tag("SQL")
 	@Test
 	@DisplayName("get /api/user/detail/{userId}: 指定したIDのuserが取得できること")
 	void test_getUserById() {
@@ -57,7 +59,8 @@ class UserRestControllerApServerIntegrationTest {
 		assertThat(user.getAge()).isEqualTo(21);
 		assertThat(user.getBirthday()).isEqualTo("2000-01-01");       
 	}
-	
+
+    @Tag("SQL")
 	@Test
 	@DisplayName("get /api/user/detail/{userId}: 指定したIDのuserが取得できないこと")
 	void test_getUser_not_found() {
@@ -78,6 +81,7 @@ class UserRestControllerApServerIntegrationTest {
 		assertThat(user).isNull(); 
 	}
 	
+    @Tag("SQL")
 	@Test
 	@DisplayName("get /api/user/detail/{userId}: 指定したIDのuserが取得できること")
 	void test_detail() {
@@ -101,6 +105,7 @@ class UserRestControllerApServerIntegrationTest {
 		assertThat(user.getBirthday()).isEqualTo("2000-01-01");       
 	}
 	
+    @Tag("SQL")
 	@Test
 	@DisplayName("put /api/user/update: 指定したIDのuserを更新できること")
 	void test_update() throws Exception {
