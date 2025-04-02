@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RowDataV2Serializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.rest.sandbox.model</a> &gt; <span class="el_source">RowDataV2Serializer.java</span></div><h1>RowDataV2Serializer.java</h1><pre class="source lang-java linenums">package com.example.rest.sandbox.model;
+
+
+import java.io.IOException;
+import java.util.Map;
+
+import com.example.rest.sandbox.model.GridDynamicColumnModel.RowDataV2;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
+/**
+ * JSONレスポンス加工用
+ * */
+<span class="nc" id="L15">public class RowDataV2Serializer extends JsonSerializer&lt;RowDataV2&gt; {</span>
+    @Override
+    public void serialize(RowDataV2 rowData, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+<span class="nc" id="L18">        gen.writeStartObject();</span>
+        
+        // 基本フィールドをシリアライズ
+<span class="nc" id="L21">        gen.writeStringField(&quot;id&quot;, rowData.id());</span>
+<span class="nc" id="L22">        gen.writeStringField(&quot;category&quot;, rowData.category());</span>
+<span class="nc" id="L23">        gen.writeStringField(&quot;item&quot;, rowData.item());</span>
+
+        // detailItems のキーと値をトップレベルに展開
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        for (Map.Entry&lt;String, Object&gt; entry : rowData.detailItems().entrySet()) {</span>
+<span class="nc" id="L27">            gen.writeObjectField(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L28">        }</span>
+
+<span class="nc" id="L30">        gen.writeEndObject();</span>
+<span class="nc" id="L31">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

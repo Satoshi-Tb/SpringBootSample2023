@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.config</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package com.example.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+@EnableWebSecurity
+@Configuration
+<span class="fc" id="L17">public class SecurityConfig   {</span>
+	
+	/**
+	 * SpringSecurity6対応
+	 * */
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//ログイン方法が分からなくなった
+<span class="fc" id="L25">        http</span>
+<span class="fc" id="L26">    		.formLogin(login -&gt; login</span>
+<span class="fc" id="L27">		        .loginProcessingUrl(&quot;/login&quot;)</span>
+<span class="fc" id="L28">		        .loginPage(&quot;/login&quot;)</span>
+<span class="fc" id="L29">		        .defaultSuccessUrl(&quot;/user/list&quot;, true)</span>
+<span class="fc" id="L30">		        .failureUrl(&quot;/login?error&quot;)</span>
+<span class="fc" id="L31">		        .usernameParameter(&quot;userId&quot;)</span>
+<span class="fc" id="L32">		        .passwordParameter(&quot;password&quot;)</span>
+<span class="fc" id="L33">		        .permitAll())</span>
+<span class="fc" id="L34">		    .authorizeHttpRequests(authz -&gt; authz</span>
+<span class="fc" id="L35">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/webjars/**&quot;)).permitAll()</span>
+<span class="fc" id="L36">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/css/**&quot;)).permitAll()</span>
+<span class="fc" id="L37">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/js/**&quot;)).permitAll()</span>
+<span class="fc" id="L38">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/h2-console/**&quot;)).permitAll()</span>
+<span class="fc" id="L39">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/login&quot;)).permitAll()</span>
+<span class="fc" id="L40">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/user/signup&quot;)).permitAll()</span>
+<span class="fc" id="L41">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/api/**&quot;)).permitAll()  // いったん無制限</span>
+<span class="fc" id="L42">	    		.requestMatchers(new AntPathRequestMatcher(&quot;/admin&quot;)).hasAuthority(&quot;ROLE_ADMIN&quot;) // 権限制御</span>
+<span class="fc" id="L43">	    		.anyRequest().authenticated()) // それ以外は直リンクNG</span>
+<span class="fc" id="L44">		    .logout(logout -&gt;logout</span>
+<span class="fc" id="L45">	    		.logoutRequestMatcher(new AntPathRequestMatcher(&quot;/logout&quot;))</span>
+<span class="fc" id="L46">	    		.logoutUrl(&quot;/logout&quot;)</span>
+<span class="fc" id="L47">	            .logoutSuccessUrl(&quot;/login?logout&quot;))</span>
+<span class="fc" id="L48">            .csrf(csrf -&gt; csrf.disable())</span>
+            // H2コンソール用にX-Frame-Optionsを無効化
+<span class="fc" id="L50">            .headers(headers -&gt; headers.frameOptions().disable());        </span>
+        
+//        //CSRF対策を無効に設定（一時的）
+//        http.csrf().disable();
+        
+<span class="fc" id="L55">        return http.build();</span>
+	}
+	
+	@Bean
+	protected PasswordEncoder passwordEncoder() {
+		//パスワードの暗号化
+<span class="fc" id="L61">		return new BCryptPasswordEncoder();</span>
+	}
+	
+	
+	/**
+	 * インメモリ認証
+	 * */
+	@Bean
+	public InMemoryUserDetailsManager userDetailsService(){
+		
+<span class="fc" id="L71">	    UserDetails user = User.builder()</span>
+<span class="fc" id="L72">	        .username(&quot;user&quot;)</span>
+<span class="fc" id="L73">	        .password(passwordEncoder().encode(&quot;password&quot;))</span>
+<span class="fc" id="L74">	        .authorities(&quot;ROLE_GENERAL&quot;)</span>
+<span class="fc" id="L75">	        .build();</span>
+	    
+<span class="fc" id="L77">	    UserDetails admin = User.builder()</span>
+<span class="fc" id="L78">	        .username(&quot;admin&quot;)</span>
+<span class="fc" id="L79">	        .password(passwordEncoder().encode(&quot;password&quot;))</span>
+<span class="fc" id="L80">	        .authorities(&quot;ROLE_ADMIN&quot;)</span>
+<span class="fc" id="L81">	        .build();</span>
+	    
+<span class="fc" id="L83">	    return new InMemoryUserDetailsManager(user, admin);</span>
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

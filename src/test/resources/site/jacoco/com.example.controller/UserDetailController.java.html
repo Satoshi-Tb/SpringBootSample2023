@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDetailController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.controller</a> &gt; <span class="el_source">UserDetailController.java</span></div><h1>UserDetailController.java</h1><pre class="source lang-java linenums">package com.example.controller;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.domain.user.service.UserService;
+import com.example.form.UserDetailForm;
+
+import lombok.extern.slf4j.Slf4j;
+
+<span class="fc" id="L17">@Slf4j</span>
+@Controller
+@RequestMapping(&quot;/user&quot;)
+<span class="fc" id="L20">public class UserDetailController {</span>
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	/** ユーザー詳細画面を表示 */
+	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
+	@GetMapping(&quot;/detail/{userId:.+}&quot;)
+	public String getUserOne(UserDetailForm form, Model model, @PathVariable(&quot;userId&quot;) String userId) {
+
+		// ユーザーを1件取得
+<span class="nc" id="L34">		var user = userService.getUserOne(userId);</span>
+<span class="nc" id="L35">		user.setPassword(null);</span>
+		
+		// MUserをFormに変換
+<span class="nc" id="L38">		form = modelMapper.map(user, UserDetailForm.class);</span>
+
+<span class="nc" id="L40">		model.addAttribute(&quot;userDetailForm&quot;, form);</span>
+		
+		// ユーザー詳細画面を表示
+<span class="nc" id="L43">		return &quot;user/detail&quot;;</span>
+	}
+	
+	/** ユーザー更新処理 */
+	// params属性は、type=submitのbuttonタグのname属性と同じ値を指定する。こうすることで、同一のformタグ内のボタンであっても、
+	// コントローラで受け取るメソッドを変更することができる。
+	// value属性にはURLを指定する。
+	@PostMapping(value = &quot;/detail&quot;, params = &quot;update&quot;)
+	public String updateUser(Model model, UserDetailForm form) {
+		try {
+<span class="nc" id="L53">			userService.updateUserOne(form.getUserId(), form.getPassword(), form.getUserName());</span>
+<span class="nc" id="L54">		} catch (Exception e) {</span>
+<span class="nc" id="L55">			log.error(&quot;ユーザー更新でエラー&quot;, e);</span>
+<span class="nc" id="L56">		}</span>
+
+
+		// ユーザー一覧画面にリダイレクト
+<span class="nc" id="L60">		return &quot;redirect:/user/list&quot;;</span>
+	}
+	
+	/** ユーザー削除処理 */
+	@PostMapping(value = &quot;/detail&quot;, params = &quot;delete&quot;)
+	public String deleteUser(Model model, UserDetailForm form) {
+		
+<span class="nc" id="L67">		userService.deleteUserOne(form.getUserId());</span>
+		
+		// ユーザー一覧画面にリダイレクト
+<span class="nc" id="L70">		return &quot;redirect:/user/list&quot;;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

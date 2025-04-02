@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.domain.user.service.impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.domain.user.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.domain.user.model.CustomMUser;
+import com.example.domain.user.model.FilterItem;
+import com.example.domain.user.model.MUser;
+import com.example.domain.user.service.UserListCriteria;
+import com.example.domain.user.service.UserService;
+import com.example.repositry.UserMapper;
+
+@Service
+<span class="fc" id="L19">public class UserServiceImpl implements UserService {</span>
+
+	@Autowired
+	private UserMapper mapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	/** ユーザー登録 */
+	@Override
+	public void signup(MUser user) {
+<span class="fc" id="L30">		user.setDepartmentId(1);</span>
+<span class="fc" id="L31">		user.setRole(&quot;ROLE_GENERAL&quot;);</span>
+		
+		//パスワード暗号化
+<span class="fc" id="L34">		String rawPasswd = user.getPassword();</span>
+<span class="fc" id="L35">		user.setPassword(passwordEncoder.encode(rawPasswd));</span>
+<span class="fc" id="L36">		mapper.insertOne(user);	</span>
+<span class="fc" id="L37">	}</span>
+
+	/** ユーザー取得 */
+	@Override
+	public List&lt;MUser&gt; getUsers(MUser user) {
+<span class="nc" id="L42">		return mapper.findMany(user);</span>
+	}
+
+	/** ユーザー取得 */
+	@Override
+	public List&lt;MUser&gt; getUsersByPagination(UserListCriteria condition) {		
+<span class="nc" id="L48">		return mapper.findManyByPagination(condition);</span>
+	}
+	
+	@Override
+	public int getUsersByPaginationTotalCount(UserListCriteria condition) {
+<span class="nc" id="L53">		return mapper.findManyByPaginationTotalCount(condition);</span>
+	}
+	
+	/** ユーザー取得（１件） */
+	@Override
+	public MUser getUserOne(String userId) {
+<span class="fc" id="L59">		return mapper.findOne(userId);</span>
+	}
+	
+	/** フィルタ結果取得 */
+	@Override
+	public List&lt;FilterItem&gt; getUsersFilter(String filterName, UserListCriteria condition) {
+		//TODO フィルタサービスの口は1つにまとめられるとしても、SQLの共通化は難しそうかも
+<span class="nc bnc" id="L66" title="All 3 branches missed.">        switch (filterName) {</span>
+	        case &quot;gender&quot;:
+<span class="nc" id="L68">	    		return mapper.getFilterByGender(condition);</span>
+	        case &quot;departmentId&quot;:
+<span class="nc" id="L70">	    		return mapper.getFilterByDepartmentId(condition);</span>
+	        default:
+<span class="nc" id="L72">	        	return new ArrayList&lt;FilterItem&gt;();</span>
+        }
+	}
+
+	/** ユーザー更新（１件） */
+	// @Transactionalのアノテーションが付いたメソッド内で例外が発生すると自動でロールバックされる。
+	// ロールバック対象は、デフォルトではスローされた例外が RuntimeException のインスタンスまたはサブクラスである場合です。(Error インスタンスもデフォルトでロールバックします)。
+	// publicのメソッドにアノテーションを付与した場合のみ、ロールバックが有効になる。
+	// アノテーションを付けたメソッド以降の処理が同一トランザクション管理範囲となる。
+	@Transactional
+	@Override
+	public void updateUserOne(String userId, String password, String userName) {
+		//パスワード暗号化
+<span class="nc" id="L85">		mapper.updateOne(userId, passwordEncoder.encode(password), userName);</span>
+<span class="nc" id="L86">	}</span>
+	
+	@Transactional
+	@Override
+	public void updateUser(CustomMUser user) {
+		//パスワード暗号化
+<span class="fc" id="L92">		String newPasswd = passwordEncoder.encode(user.getPassword());</span>
+<span class="fc" id="L93">		user.setPassword(newPasswd);</span>
+
+<span class="fc" id="L95">		mapper.updateByUser(user);</span>
+<span class="fc" id="L96">	}</span>
+	
+	/** ユーザー削除（１件） */
+	@Transactional
+	@Override
+	public void deleteUserOne(String userId) {
+<span class="nc" id="L102">		mapper.deleteOne(userId);</span>
+<span class="nc" id="L103">	}</span>
+
+	/** ユーザー削除（複数件） */
+	@Transactional
+	@Override
+	public void deleteUsers(List&lt;String&gt; userIdList) {
+		// mapper.deleteUsersByInClause(userIdList);
+<span class="nc" id="L110">		mapper.deleteUsersByUnionClause(userIdList);</span>
+<span class="nc" id="L111">	}</span>
+
+	@Override
+	public String getNextUserId(String userId) {
+<span class="fc" id="L115">		return mapper.findNextUserId(userId);</span>
+	}
+
+	@Override
+	public String getBeforeUserId(String userId) {
+<span class="fc" id="L120">		return mapper.findBeforeUserId(userId);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

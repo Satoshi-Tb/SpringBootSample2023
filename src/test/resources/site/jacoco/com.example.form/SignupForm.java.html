@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupForm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.form</a> &gt; <span class="el_source">SignupForm.java</span></div><h1>SignupForm.java</h1><pre class="source lang-java linenums">package com.example.form;
+
+import java.util.Date;
+
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import lombok.Data;
+
+<span class="nc bnc" id="L16" title="All 54 branches missed.">@Data</span>
+public class SignupForm {
+	// NotNull/NotEmpty/NotBlankの違い
+	// アノテーション   | null | 空文字 | 空白
+	//-------------------------------------
+	//@NotNull      | NG  | OK      | OK
+	//@NotEmpty   | NG  | NG     | OK
+	//@NotBlank    | NG  | NG     | NG
+	
+	// groups属性にて、バリデーション順番を指定
+	
+	@NotBlank(groups = ValidGroup1.class)
+	@Email(groups = ValidGroup2.class)
+<span class="nc" id="L29">	private String userId;</span>
+	
+	@NotBlank(groups = ValidGroup1.class)
+	@Length(min = 4, max = 100, groups = ValidGroup2.class)
+	@Pattern(regexp = &quot;^[a-zA-Z0-9]+$&quot;)
+<span class="nc" id="L34">	private String password;</span>
+	
+	@NotBlank(groups = ValidGroup1.class)
+<span class="nc" id="L37">	private String userName;</span>
+	
+	// pattern属性に設定したフォーマット文字列を、Date型にバインドする
+	@DateTimeFormat(pattern = &quot;yyyy/MM/dd&quot;)
+	@NotNull(groups = ValidGroup1.class)
+<span class="nc" id="L42">	private Date birthday;</span>
+	
+	@Min(value= 20, groups = ValidGroup2.class)
+	@Max(value = 200, groups = ValidGroup2.class)
+<span class="nc" id="L46">	private Integer age;</span>
+	
+	@NotNull(groups = ValidGroup1.class)
+<span class="nc" id="L49">	private Integer gender;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

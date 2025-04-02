@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.controller</a> &gt; <span class="el_source">SignupController.java</span></div><h1>SignupController.java</h1><pre class="source lang-java linenums">package com.example.controller;
+
+import java.util.Locale;
+import java.util.Map;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.application.service.UserApplicationService;
+import com.example.domain.user.model.MUser;
+import com.example.domain.user.service.UserService;
+import com.example.form.GroupOrder;
+import com.example.form.SignupForm;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@RequestMapping(&quot;/user&quot;)
+<span class="fc" id="L30">@Slf4j</span>
+<span class="fc" id="L31">public class SignupController {</span>
+	// @Slf4jはLombokのアノテーション。これをクラスに付けるとlogというstatic変数が用意される。その変数のメソッドを使うことで簡単にログ出力ができる。
+	
+	@Autowired
+	private UserApplicationService userApplicationService;
+
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	//ユーザー登録画面を表示
+	@GetMapping(&quot;/signup&quot;)
+	public String getSignup(Model model, Locale locale, @ModelAttribute SignupForm form) {
+		// @ModelAttribute 自動でModelにインスタンスを登録してくれる。クラス名の先頭を小文字にした文字列をキーに登録してくれる。
+		// model.addAttribute(&quot;signupForm&quot;, form)のイメージ
+<span class="nc" id="L48">		Map&lt;String, Integer&gt; genderMap = userApplicationService.getGenderMap(locale);</span>
+<span class="nc" id="L49">		model.addAttribute(&quot;genderMap&quot;, genderMap);</span>
+		
+		// サインアップ画面に遷移
+<span class="nc" id="L52">		return &quot;user/signup&quot;;</span>
+	}
+	
+	//ユーザー登録処理
+	@PostMapping(&quot;/signup&quot;)
+	public String postSignup(Model model, Locale locale,
+			@ModelAttribute @Validated(GroupOrder.class) SignupForm form, 
+			BindingResult bindingResult) {
+		
+		//入力チェック結果
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (bindingResult.hasErrors()) {</span>
+			//NG: ユーザー登録画面に戻す
+<span class="nc" id="L64">			return getSignup(model, locale, form);</span>
+		}
+		
+<span class="nc" id="L67">		log.info(form.toString());</span>
+		
+		//formをMUserクラスに変換。
+		//フォームのプロパティと、モデルのプロパティを一致させておくのがポイント。
+		//全てを完全一致させる必要は無い。モデルに転送させたいプロパティを一致させておくこと。
+		//
+		//formクラスをサービスに渡さないようにする。理由は以下の通り
+		//・画面に変更があっても、サービスの修正が不要になる。
+		//・他の画面からもサービスを再利用できるようになる。
+<span class="nc" id="L76">		MUser user = modelMapper.map(form, MUser.class);</span>
+		
+		//ユーザー登録
+<span class="nc" id="L79">		userService.signup(user);</span>
+		
+		//ログイン画面にリダイレクト
+<span class="nc" id="L82">		return &quot;redirect:/login&quot;;</span>
+	}
+
+	// コントローラの共通例外処理
+	/** データベース関連の例外処理 */
+	@ExceptionHandler(DataAccessException.class)
+	public String dataAccessExceptionHandler(DataAccessException e, Model model) {
+		// 空文字をセット
+<span class="nc" id="L90">		model.addAttribute(&quot;error&quot;, &quot;&quot;);</span>
+		
+		// メッセージをモデルに登録
+<span class="nc" id="L93">		model.addAttribute(&quot;message&quot;, &quot;SignupControllerで例外が発生しました&quot;);</span>
+		
+		// HTTPのエラーコード（500）をModelに登録
+<span class="nc" id="L96">		model.addAttribute(&quot;status&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		
+		
+<span class="nc" id="L99">		return &quot;error&quot;;</span>
+	}
+	
+	/** その他の例外ハンドラ */
+	@ExceptionHandler(Exception.class)
+	public String exceptionHandler(Exception e, Model model) {
+		// 空文字をセット
+<span class="nc" id="L106">		model.addAttribute(&quot;error&quot;, &quot;&quot;);</span>
+		
+		// メッセージをモデルに登録
+<span class="nc" id="L109">		model.addAttribute(&quot;message&quot;, &quot;SignupControllerで例外が発生しました&quot;);</span>
+		
+		// HTTPのエラーコード（500）をModelに登録
+<span class="nc" id="L112">		model.addAttribute(&quot;status&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		
+		
+<span class="nc" id="L115">		return &quot;error&quot;;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ja"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserRestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringBootSample2023</a> &gt; <a href="index.source.html" class="el_package">com.example.rest.controller</a> &gt; <span class="el_source">UserRestController.java</span></div><h1>UserRestController.java</h1><pre class="source lang-java linenums">package com.example.rest.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.domain.user.model.CustomMUser;
+import com.example.domain.user.model.FilterItem;
+import com.example.domain.user.model.MUser;
+import com.example.domain.user.service.UserListCriteria;
+import com.example.domain.user.service.UserService;
+import com.example.form.GroupOrder;
+import com.example.form.SignupForm;
+import com.example.form.UserListForm;
+
+/**
+ * RestControllerアノテーションをクラスに付けると、そのクラス内のメソッドの戻り値が、HTTPレスポンスボディとなる
+ * */
+@RestController
+@RequestMapping(&quot;/api/user&quot;)
+<span class="fc" id="L40">public class UserRestController {</span>
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
+	@Autowired
+	private MessageSource messageSource;
+	
+	@GetMapping(&quot;/get/list&quot;)
+	public ResponseEntity&lt;UserListResponse&gt; getUserList(UserListForm form) {	
+<span class="nc" id="L53">		var user = modelMapper.map(form, MUser.class);</span>
+<span class="nc" id="L54">		var userList = userService.getUsers(user);</span>
+		
+<span class="nc" id="L56">		var response = new UserListResponse();</span>
+<span class="nc" id="L57">		response.setTotalCount(userList.size());</span>
+<span class="nc" id="L58">		response.setData(userList);</span>
+<span class="nc" id="L59">		response.setCode(&quot;0000&quot;);</span>
+<span class="nc" id="L60">		response.setMessage(&quot;&quot;);</span>
+		
+		
+<span class="nc" id="L63">		return new ResponseEntity&lt;UserListResponse&gt;(response,  HttpStatus.OK);</span>
+	}
+	
+	
+	// TODO WIP
+	@GetMapping(&quot;/get/filter/{filterName}&quot;)
+	public ResponseEntity&lt;RestResponse&lt;List&lt;FilterItem&gt;&gt;&gt; getUserListFilter(@PathVariable String filterName, @ModelAttribute UserListCriteria condition) {	
+<span class="nc" id="L70">		condition.setOffset(condition.getPage() * condition.getSize());</span>
+
+<span class="nc" id="L72">		return RestResponse.createSuccessResponse(userService.getUsersFilter(filterName, condition));</span>
+	}
+	
+	
+	@PostMapping(&quot;/get/list-pager&quot;)
+	public ResponseEntity&lt;RestResponse&lt;UserListPaginationResponse&gt;&gt; getUserListByPaginationPost(@RequestBody UserListCriteria condition) {	
+<span class="nc" id="L78">		condition.setOffset(condition.getPage() * condition.getSize());</span>
+<span class="nc" id="L79">		return getUserListByPagination(condition);</span>
+	}
+	
+	@GetMapping(&quot;/get/list-pager&quot;)
+	public ResponseEntity&lt;RestResponse&lt;UserListPaginationResponse&gt;&gt; getUserListByPaginationGet(@ModelAttribute  UserListCriteria condition) {	
+<span class="nc" id="L84">		condition.setOffset(condition.getPage() * condition.getSize());</span>
+<span class="nc" id="L85">		return getUserListByPagination(condition);</span>
+	}
+	
+	private ResponseEntity&lt;RestResponse&lt;UserListPaginationResponse&gt;&gt; getUserListByPagination(UserListCriteria condition) {
+		// １ページあたりのデータ
+<span class="nc" id="L90">		var userList = userService.getUsersByPagination(condition);</span>
+		// 検索条件に対する総件数
+<span class="nc" id="L92">		int totalCount = userService.getUsersByPaginationTotalCount(condition);</span>
+		
+<span class="nc" id="L94">		var response = new UserListPaginationResponse();</span>
+<span class="nc" id="L95">		response.setResultNum(totalCount);</span>
+<span class="nc" id="L96">		response.setUserList(userList);</span>
+
+<span class="nc" id="L98">		return RestResponse.createSuccessResponse(response);</span>
+	}
+	
+	// ユーザー名がメアド形式のため、userIdではuser@xxx.co.jpが取得できない。正規表現として:.+追加することで対応
+	@GetMapping(&quot;/detail/{userId:.+}&quot;)
+	public ResponseEntity&lt;RestResponse&lt;UserResponse&gt;&gt; getUserOne(@PathVariable(&quot;userId&quot;) String userId) {
+
+		// ユーザーを1件取得
+<span class="fc" id="L106">		MUser user = userService.getUserOne(userId);</span>
+<span class="fc" id="L107">		String nextUserId = userService.getNextUserId(userId);</span>
+<span class="fc" id="L108">		String beforeUserId = userService.getBeforeUserId(userId);</span>
+
+<span class="fc" id="L110">		UserResponse response = new UserResponse();</span>
+		// データなし：エラー
+<span class="fc" id="L112">		response.setUser(user);</span>
+<span class="fc" id="L113">		response.setNextUserId(nextUserId);</span>
+<span class="fc" id="L114">		response.setBeforeUserId(beforeUserId);</span>
+		
+<span class="fc" id="L116">		return RestResponse.createSuccessResponse(response);</span>
+	}
+	
+	@PostMapping(&quot;/signup&quot;)
+	public ResponseEntity&lt;RestResponse&lt;MUser&gt;&gt; postSignup(@Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Locale locale) {
+<span class="nc bnc" id="L121" title="All 2 branches missed.">		if (bindingResult.hasErrors()) {</span>
+<span class="nc" id="L122">			Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();</span>
+			
+			// エラーメッセージ取得
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			for (FieldError error : bindingResult.getFieldErrors()) {</span>
+<span class="nc" id="L126">				String message = messageSource.getMessage(error, locale);</span>
+<span class="nc" id="L127">				errors.put(error.getField(), message);</span>
+<span class="nc" id="L128">			}</span>
+			
+			// 結果:NG
+<span class="nc" id="L131">			return RestResponse.createErrorResponse(&quot;9999&quot;, errors, HttpStatus.BAD_REQUEST);</span>
+		}
+		
+<span class="nc" id="L134">		MUser user = modelMapper.map(form, MUser.class);</span>
+		
+<span class="nc" id="L136">		userService.signup(user);</span>
+		
+		// 結果：OK
+<span class="nc" id="L139">		return RestResponse.createSuccessResponse(user);</span>
+	}
+	
+	@PutMapping(&quot;/update&quot;)  // Putメソッドにマップ
+	public ResponseEntity&lt;RestResponse&lt;MUser&gt;&gt; updateUser(@RequestBody UserRequest req) {
+<span class="fc" id="L144">		CustomMUser user = modelMapper.map(req, CustomMUser.class);</span>
+		
+		// ユーザーを更新
+<span class="fc" id="L147">		userService.updateUser(user);</span>
+		
+		// ユーザーを1件取得
+<span class="fc" id="L150">		var resp = userService.getUserOne(user.getUserId());</span>
+		
+<span class="fc" id="L152">		return RestResponse.createSuccessResponse(resp);</span>
+	}
+	
+	@DeleteMapping(&quot;/delete&quot;)  // Deleteメソッドにマップ
+	public ResponseEntity&lt;RestResponse&lt;Object&gt;&gt; deleteUser(@RequestBody UserDeleteRequest req) {
+<span class="nc" id="L157">		userService.deleteUsers(req.getUserIdList());</span>
+		
+		// 結果：OK
+<span class="nc" id="L160">		return RestResponse.createSuccessResponse();</span>
+		
+		// エラーテスト用のレスポンス
+		//return RestResponse.createErrorResponse(&quot;9999&quot;, null, HttpStatus.BAD_REQUEST);
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
