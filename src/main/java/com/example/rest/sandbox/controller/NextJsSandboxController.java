@@ -1,5 +1,6 @@
 package com.example.rest.sandbox.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,7 @@ import com.example.rest.controller.RestResponse;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.DetailItem;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowData;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowDataV2;
+import com.example.rest.sandbox.service.GridDynamicColumnExcelFileCreateService;
 import com.example.rest.sandbox.service.GridDynamicColumnService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +33,34 @@ public class NextJsSandboxController {
 	
 	@Autowired
 	private GridDynamicColumnService gridDynamicColumnsService;
+	
+	@Autowired
+	private GridDynamicColumnExcelFileCreateService excelService;
+	
+	// Excelダウンロード用のヘッダ
+	private static HttpHeaders createHeaders(String filename) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        return headers;
+	}
+	
+	/**
+	 * Excel出力データサンプル
+	 * */
+	@GetMapping("/dynamic-column/list/{id}/excel")
+	public ResponseEntity<byte[]>  downloadExcel(@PathVariable String id) throws IOException {
+		
+		var byteStream = excelService.createExcelData();
+		
+		var content = byteStream.readAllBytes();
+
+		var headers = createHeaders(String.format("sample_%s.xlsx", id));
+		
+        return new ResponseEntity<>(content, headers, HttpStatus.OK);
+	}
+
 	
 	/**
 	 * 動的カラム定義＋データ取得サンプル
