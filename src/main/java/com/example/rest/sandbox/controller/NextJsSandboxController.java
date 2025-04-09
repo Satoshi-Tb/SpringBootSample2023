@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.rest.controller.RestResponse;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.DetailItem;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowData;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowDataV2;
 import com.example.rest.sandbox.service.GridDynamicColumnService;
-import com.example.rest.controller.RestResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +29,9 @@ public class NextJsSandboxController {
 	@Autowired
 	private GridDynamicColumnService gridDynamicColumnsService;
 	
+	/**
+	 * 動的カラム定義取得サンプル
+	 * */
 	@GetMapping("/dynamic-column/list/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponse>> getGridDynamicColumnDataList(@PathVariable String id) {
 		
@@ -40,6 +43,9 @@ public class NextJsSandboxController {
 		return RestResponse.createSuccessResponse(response);
 	}
 
+	/**
+	 * 動的カラム定義取得サンプル
+	 * */
 	@GetMapping("/dynamic-column/list/v2/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponseV2>> getGridDynamicColumnDataList2(@PathVariable String id) {
 		
@@ -62,7 +68,10 @@ public class NextJsSandboxController {
 		
 		return RestResponse.createSuccessResponse(response);
 	}
-	
+
+	/**
+	 * 動的カラム定義取得サンプル
+	 * */
 	@GetMapping("/dynamic-column/list/v3/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponseV3>> getGridDynamicColumnDataList3(@PathVariable String id) {
 		
@@ -80,7 +89,10 @@ public class NextJsSandboxController {
 		
 		return RestResponse.createSuccessResponse(response);
 	}
-	
+
+	/**
+	 * 動的カラム定義取得サンプル
+	 * */
 	@GetMapping("/dynamic-column/list/v4/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponseV4>> getGridDynamicColumnDataList4(@PathVariable String id) {
 		
