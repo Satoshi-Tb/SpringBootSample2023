@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.DetailItem;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowData;
 import com.example.rest.sandbox.model.GridDynamicColumnModel.RowDataV2;
+import com.example.rest.sandbox.service.GridDynamicColumnService;
 import com.example.rest.controller.RestResponse;
-import com.example.rest.sandbox.model.GridDynamicColumnService;
 
 import lombok.extern.slf4j.Slf4j;
 

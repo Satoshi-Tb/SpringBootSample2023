@@ -1,4 +1,4 @@
-package com.example.rest.sandbox.model;
+package com.example.rest.sandbox.service;
 
 import java.util.ArrayList;
 import java.util.List;
