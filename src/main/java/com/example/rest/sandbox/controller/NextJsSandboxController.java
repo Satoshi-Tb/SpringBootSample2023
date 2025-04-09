@@ -30,7 +30,7 @@ public class NextJsSandboxController {
 	private GridDynamicColumnService gridDynamicColumnsService;
 	
 	/**
-	 * 動的カラム定義取得サンプル
+	 * 動的カラム定義＋データ取得サンプル
 	 * */
 	@GetMapping("/dynamic-column/list/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponse>> getGridDynamicColumnDataList(@PathVariable String id) {
@@ -44,7 +44,7 @@ public class NextJsSandboxController {
 	}
 
 	/**
-	 * 動的カラム定義取得サンプル
+	 * 動的カラム定義＋データ取得サンプル
 	 * */
 	@GetMapping("/dynamic-column/list/v2/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponseV2>> getGridDynamicColumnDataList2(@PathVariable String id) {
@@ -70,7 +70,7 @@ public class NextJsSandboxController {
 	}
 
 	/**
-	 * 動的カラム定義取得サンプル
+	 * 動的カラム定義＋データ取得サンプル
 	 * */
 	@GetMapping("/dynamic-column/list/v3/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponseV3>> getGridDynamicColumnDataList3(@PathVariable String id) {
@@ -91,7 +91,7 @@ public class NextJsSandboxController {
 	}
 
 	/**
-	 * 動的カラム定義取得サンプル
+	 * 動的カラム定義＋データ取得サンプル
 	 * */
 	@GetMapping("/dynamic-column/list/v4/{id}")
 	public ResponseEntity<RestResponse<GridDynamicColumnResponseV4>> getGridDynamicColumnDataList4(@PathVariable String id) {
