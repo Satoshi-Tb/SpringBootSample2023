@@ -5,17 +5,37 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
-import com.example.rest.sandbox.model.GridDynamicColumnModel.DetailItem;
-import com.example.rest.sandbox.model.GridDynamicColumnModel.RowData;
+import com.example.rest.sandbox.model.GridDynamicColumnExcelDataModel.DetailItem;
+import com.example.rest.sandbox.model.GridDynamicColumnExcelDataModel.RowData;
+
+
 
 @Service
 public class GridDynamicColumnExcelFileCreateService {
+	
+	private static int convertPxToColumnWidth(Integer pxWidth) {
+	    if (pxWidth == null) {
+	        return -1;
+	    }
+	    
+	    double charWidth = pxWidth / 7.0;
+	    int columnWidth = (int)(charWidth * 256);
+	    
+	    // 最小幅と最大幅の制限
+	    int minWidth = 5 * 256;   // 最小5文字分
+	    int maxWidth = 100 * 256; // 最大100文字分
+	    
+	    return Math.min(Math.max(columnWidth, minWidth), maxWidth);
+	}
 	
     public ByteArrayInputStream createExcelData() throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -24,7 +44,13 @@ public class GridDynamicColumnExcelFileCreateService {
 
             // テストデータ取得（本来、DBから取得）
         	var data = getRowData("1");
-            
+        
+        	
+            // 文字列フォーマット用のCellStyleを作成
+            CellStyle textStyle = workbook.createCellStyle();
+            DataFormat format = workbook.createDataFormat();
+            textStyle.setDataFormat(format.getFormat("@"));  // "@" は文字列フォーマット
+        	
         	int rowCnt = 1;
         	
         	for (RowData r : data) {
@@ -40,6 +66,13 @@ public class GridDynamicColumnExcelFileCreateService {
     			    int colOffset = 1;
     			    for (DetailItem item : r.detailItems()) {
     			    	headerRow.createCell(2 + colOffset).setCellValue(item.fieldName());
+    			    	
+                        // 列幅の設定
+                        Integer columnWidth = item.columnWidth();
+                        if (columnWidth != null) {
+                            sheet.setColumnWidth(2 + colOffset, convertPxToColumnWidth(columnWidth));
+                        }
+                        
     				    colOffset++;
     			    }
         		}
@@ -51,7 +84,9 @@ public class GridDynamicColumnExcelFileCreateService {
 
 			    int colOffset = 1;
 			    for (DetailItem item : r.detailItems()) {
-				    row.createCell(2 + colOffset).setCellValue(item.value());
+	                Cell cell = row.createCell(2 + colOffset);
+	                cell.setCellValue(item.value());
+	                cell.setCellStyle(textStyle); // 文字列形式
 				    colOffset++;
 			    }
 			    // 可変項目
@@ -66,44 +101,25 @@ public class GridDynamicColumnExcelFileCreateService {
     }
 	
 	private static List<RowData> getRowData(String id) {
-		if (id.equals("1")) {
-			return List.of(
-					new RowData("1", "野菜", "キャベツ", List.of(
-							new DetailItem("101", "freeItem1", "itemId", "11"),
-							new DetailItem("102", "freeItem2", "unit", "1玉"),
-							new DetailItem("103", "freeItem3", "price", "300"),
-							new DetailItem("104", "freeItem4", "vegetableType", "2")
-					)),
-					new RowData("2", "野菜", "ほうれん草", List.of(
-							new DetailItem("201", "freeItem1", "itemId", "12"),
-							new DetailItem("202", "freeItem2", "unit", "1束"),
-							new DetailItem("203", "freeItem3", "price", "200"),
-							new DetailItem("204", "freeItem4", "vegetableType", "1")
-					)),
-					new RowData("3", "野菜", "ブロッコリー", List.of(
-							new DetailItem("301", "freeItem1", "itemId", "13"),
-							new DetailItem("302", "freeItem2", "unit", "1個"),
-							new DetailItem("303", "freeItem3", "price", "300"),
-							new DetailItem("304", "freeItem4", "vegetableType", "1")
-					))
-				);
-		}
-		
 		return List.of(
-				new RowData("1", "書籍", "小説", List.of(
-						new DetailItem("111", "freeItem1", "title", "吾輩は猫である"),
-						new DetailItem("112", "freeItem2", "authro", "夏目漱石"),
-						new DetailItem("113", "freeItem3", "genre", "1"),
-						new DetailItem("114", "freeItem4", "price", "700"),
-						new DetailItem("115", "freeItem5", "hasEbookFormat", "1")
+				new RowData("1", "野菜", "キャベツ", List.of(
+						new DetailItem("101", "freeItem1",  "11", null),
+						new DetailItem("102", "freeItem2", "1玉", 100),
+						new DetailItem("103", "freeItem3", "300", 100),
+						new DetailItem("104", "freeItem4", "2", 50)
 				)),
-				new RowData("2", "書籍", "技術書", List.of(
-						new DetailItem("211", "freeItem1", "title", "詳解Java言語"),
-						new DetailItem("212", "freeItem2", "authro", "JVM"),
-						new DetailItem("213", "freeItem3", "genre", "3"),
-						new DetailItem("214", "freeItem4", "price", "3800"),
-						new DetailItem("215", "freeItem5", "hasEbookFormat", "0")
-						))
+				new RowData("2", "野菜", "ほうれん草", List.of(
+						new DetailItem("201", "freeItem1", "12", null),
+						new DetailItem("202", "freeItem2", "1束", 100),
+						new DetailItem("203", "freeItem3", "200", 100),
+						new DetailItem("204", "freeItem4", "1", 50)
+				)),
+				new RowData("3", "野菜", "ブロッコリー", List.of(
+						new DetailItem("301", "freeItem1", "13", null),
+						new DetailItem("302", "freeItem2", "1個", 100),
+						new DetailItem("303", "freeItem3", "300", 100),
+						new DetailItem("304", "freeItem4", "1", 50)
+				))
 			);
 	}
 
