@@ -1,0 +1,119 @@
+{
+    "code": "0000",
+    "errors": null,
+    "data": {
+        "userList": [
+            {
+                "id": "system1@co.jp",
+                "userId": "system1@co.jp",
+                "password": "$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG",
+                "userName": "システム管理者",
+                "birthday": "1999-12-31T15:00:00.000+00:00",
+                "age": 21,
+                "gender": 1,
+                "genderName": "男性",
+                "profile": "システム管理者です",
+                "departmentId": 1,
+                "role": null,
+                "department": {
+                    "departmentId": 1,
+                    "departmentName": "システム管理部"
+                },
+                "salaryList": [],
+                "insUserId": "system1@co.jp",
+                "insDate": "2025-04-17T15:23:26.823+00:00",
+                "updUserId": "system1@co.jp",
+                "updDate": "2025-04-17T15:23:26.823+00:00"
+            },
+            {
+                "id": "system2@co.jp",
+                "userId": "system2@co.jp",
+                "password": "$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG",
+                "userName": "システム管理者2",
+                "birthday": "1999-12-31T15:00:00.000+00:00",
+                "age": 31,
+                "gender": 2,
+                "genderName": "女性",
+                "profile": "ユーザーです",
+                "departmentId": 1,
+                "role": null,
+                "department": {
+                    "departmentId": 1,
+                    "departmentName": "システム管理部"
+                },
+                "salaryList": [],
+                "insUserId": "system1@co.jp",
+                "insDate": "2025-04-17T15:23:26.823+00:00",
+                "updUserId": "system1@co.jp",
+                "updDate": "2025-04-17T15:23:26.823+00:00"
+            },
+            {
+                "id": "user13@co.jp",
+                "userId": "user13@co.jp",
+                "password": "$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG",
+                "userName": "ユーザー13",
+                "birthday": "1999-12-31T15:00:00.000+00:00",
+                "age": 49,
+                "gender": 1,
+                "genderName": "男性",
+                "profile": "ユーザーです",
+                "departmentId": 1,
+                "role": null,
+                "department": {
+                    "departmentId": 1,
+                    "departmentName": "システム管理部"
+                },
+                "salaryList": [],
+                "insUserId": "system1@co.jp",
+                "insDate": "2025-04-17T15:23:26.823+00:00",
+                "updUserId": "system1@co.jp",
+                "updDate": "2025-04-17T15:23:26.823+00:00"
+            },
+            {
+                "id": "user14@co.jp",
+                "userId": "user14@co.jp",
+                "password": "$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG",
+                "userName": "ユーザー14",
+                "birthday": "1999-12-31T15:00:00.000+00:00",
+                "age": 44,
+                "gender": 1,
+                "genderName": "男性",
+                "profile": "ユーザーです",
+                "departmentId": 1,
+                "role": null,
+                "department": {
+                    "departmentId": 1,
+                    "departmentName": "システム管理部"
+                },
+                "salaryList": [],
+                "insUserId": "system1@co.jp",
+                "insDate": "2025-04-17T15:23:26.823+00:00",
+                "updUserId": "system1@co.jp",
+                "updDate": "2025-04-17T15:23:26.823+00:00"
+            },
+            {
+                "id": "user15@co.jp",
+                "userId": "user15@co.jp",
+                "password": "$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG",
+                "userName": "ユーザー15",
+                "birthday": "1999-12-31T15:00:00.000+00:00",
+                "age": 38,
+                "gender": 1,
+                "genderName": "男性",
+                "profile": "ユーザーです",
+                "departmentId": 1,
+                "role": null,
+                "department": {
+                    "departmentId": 1,
+                    "departmentName": "システム管理部"
+                },
+                "salaryList": [],
+                "insUserId": "system1@co.jp",
+                "insDate": "2025-04-17T15:23:26.823+00:00",
+                "updUserId": "system1@co.jp",
+                "updDate": "2025-04-17T15:23:26.823+00:00"
+            }
+        ],
+        "resultNum": 21
+    }
+}

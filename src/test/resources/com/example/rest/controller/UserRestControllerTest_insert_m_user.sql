@@ -36,3 +36,13 @@ INSERT INTO m_user (
 , ('user18@co.jp', '$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG', 'ユーザー18', '2000-01-01', 50, 1, 'ユーザーです', 2, 'ROLE_GENERAL', 'system1@co.jp', CURRENT_TIMESTAMP(), 'system1@co.jp', CURRENT_TIMESTAMP())
 , ('user19@co.jp', '$2a$10$c.4qDGSyfiB/1sfgcDDusuU1vmi4a6gpTjWhxeG7vZ5XZ/YbGVYpG', 'ユーザー19', '2000-01-01', 43, 2, 'ユーザーです', 1, 'ROLE_GENERAL', 'system1@co.jp', CURRENT_TIMESTAMP(), 'system1@co.jp', CURRENT_TIMESTAMP())
 ;
+
+/* 部署マスタ */
+INSERT INTO m_department (
+    department_id
+  , department_name
+) VALUES
+(1, 'システム管理部')
+, (2, '営業部')
+, (3, 'SI事業部')
+;
