@@ -118,7 +118,7 @@ class UserRestControllerApServerIntegrationTest {
 	
     @Tag("SQL")
 	@Test
-	@DisplayName("get /api/user/get/list-pager: ")
+	@DisplayName("get /api/user/get/list-pager: 検索条件:なし、1ページ当たり:5件")
 	void test_getUserByPagination() throws IOException {
     	/*
     	 * テスト準備
@@ -169,13 +169,13 @@ class UserRestControllerApServerIntegrationTest {
 		
 		assertThat(users.size()).isEqualTo(5);
 		
-		// TODO 検証対象から、特定列（insDate、updDateなど）を除外必要
-		assertThat(users).isEqualTo(expected.getData().getUserList());
-		
-//		assertThat(user).isNotNull();
-//		assertThat(user.getUserName()).isEqualTo("ユーザー1");
-//		assertThat(user.getAge()).isEqualTo(21);
-//		assertThat(user.getBirthday()).isEqualTo("2000-01-01");       
+		// 検証対象から、特定プロパティを除外して比較する
+		for (int i = 0; i < users.size(); i++) {
+			assertThat(users.get(i))
+			.usingRecursiveComparison()  // 全プロパティを再帰的に比較
+			.ignoringFields("insUserId", "insDate", "updUserId", "updDate")  // 特定プロパティを除外して比較
+			.isEqualTo(expected.getData().getUserList().get(i));
+		}
 	}
     
     @Tag("SQL")
