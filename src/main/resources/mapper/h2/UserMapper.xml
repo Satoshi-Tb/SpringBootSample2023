@@ -119,8 +119,7 @@
       </if>
     </where>
     order by
-      m_user.department_id
-      , m_user.user_id
+      m_user.user_id
   </select>
   
   
@@ -168,9 +167,8 @@
   <select id="findManyByPagination" resultMap="user">
 	<include refid="userList"/>
     order by
-      m_user.department_id
-      , m_user.user_id
-     LIMIT #{condition.size} OFFSET #{condition.offset}
+      m_user.user_id
+    LIMIT #{condition.size} OFFSET #{condition.offset}
   </select>
   
       <!-- 
@@ -289,9 +287,12 @@
       </when>
       <otherwise>
         user_name = #{userName}
+        , birthday = #{birthday}
         , age = #{age}
         , gender = #{gender}
         , profile = #{profile}
+        , department_id = #{department.departmentId}
+        , role = #{role}
       </otherwise>
     </choose>
     , upd_user_id = #{userId}

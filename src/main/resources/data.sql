@@ -47,9 +47,10 @@ INSERT INTO m_department (
     department_id
   , department_name
 ) VALUES
-(1, 'システム管理部')
+(1, '開発部')
 , (2, '営業部')
-, (3, 'SI事業部')
+, (3, 'システム管理')
+, (9, '外注')
 ;
 
 /* 給料テーブル */
