@@ -1,17 +1,11 @@
 package com.example.rest.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +22,6 @@ import com.example.domain.user.model.FilterItem;
 import com.example.domain.user.model.MUser;
 import com.example.domain.user.service.UserListCriteria;
 import com.example.domain.user.service.UserService;
-import com.example.form.GroupOrder;
-import com.example.form.SignupForm;
 import com.example.form.UserListForm;
 
 /**
@@ -44,9 +36,6 @@ public class UserRestController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	@Autowired
-	private MessageSource messageSource;
 	
 	@GetMapping("/get/list")
 	public ResponseEntity<UserListResponse> getUserList(UserListForm form) {	
@@ -117,21 +106,8 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity<RestResponse<MUser>> postSignup(@Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Locale locale) {
-		if (bindingResult.hasErrors()) {
-			Map<String, String> errors = new HashMap<>();
-			
-			// エラーメッセージ取得
-			for (FieldError error : bindingResult.getFieldErrors()) {
-				String message = messageSource.getMessage(error, locale);
-				errors.put(error.getField(), message);
-			}
-			
-			// 結果:NG
-			return RestResponse.createErrorResponse("9999", errors, HttpStatus.BAD_REQUEST);
-		}
-		
-		MUser user = modelMapper.map(form, MUser.class);
+	public ResponseEntity<RestResponse<MUser>> postSignup(@RequestBody @Validated UserRequest req) {
+		MUser user = modelMapper.map(req, MUser.class);
 		
 		userService.signup(user);
 		
@@ -153,7 +129,7 @@ public class UserRestController {
 	}
 	
 	@DeleteMapping("/delete")  // Deleteメソッドにマップ
-	public ResponseEntity<RestResponse<Object>> deleteUser(@RequestBody UserDeleteRequest req) {
+	public ResponseEntity<RestResponse<Object>> deleteUser(@RequestBody @Validated UserDeleteRequest req) {
 		userService.deleteUsers(req.getUserIdList());
 		
 		// 結果：OK
