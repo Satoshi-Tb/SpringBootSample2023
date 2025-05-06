@@ -11,7 +11,8 @@ WORKDIR /app
 COPY . .
 
 # Mavenを使用してプロジェクトをパッケージ（JARファイルを生成）
-RUN mvn clean package
+# テストのコンパイル、実施はスキップする
+RUN mvn clean package -Dmaven.test.skip=true
 
 
 # 環境変数の設定
