@@ -1,0 +1,17 @@
+user_id, password,user_name,birthday,age,gender,profile,department_id
+,password,CSVユーザー1,2000-01-01,24,1,user_idなし,1
+err_user2@co.jp,,CSVユーザー1,2000-01-01,24,1,passwordなし,1
+err_user3@co.jp,password,CSVユーザー1,,24,1,birthdayなし,1
+err_user4@co.jp,password,CSVユーザー1,2000-01-32,24,1,birthday日付形式エラー,1
+err_user5@co.jp,password,CSVユーザー1,2000-1-1,24,1,birthday日付形式エラー,1
+err_user6@co.jp,password,CSVユーザー1,2000/01/01,24,1,birthday日付形式エラー,1
+err_user7@co.jp,password,CSVユーザー1,2000-01-01,,1,ageなし,1
+err_user8@co.jp,password,CSVユーザー1,2000-01-01,AA,1,age数値形式エラー,1
+err_user9@co.jp,password,CSVユーザー1,2000-01-01,24,,genderなし,1
+err_userA@co.jp,password,CSVユーザー1,2000-01-01,24,0,gender 1-3以外の値,1
+err_userB@co.jp,password,CSVユーザー1,2000-01-01,24,X,gender 1-3以外の値,1
+err_userC@co.jp,password,CSVユーザー1,2000-01-01,24,1,department_idなし,
+err_userD@co.jp,password,CSVユーザー1,2000-01-01,24,1,"department_id1-3,9以外の値",0
+err_userD@co.jp,password,CSVユーザー1,2000-01-01,24,1,"department_id1-3,9以外の値",4
+err_userD@co.jp,password,CSVユーザー1,2000-01-01,24,1,"department_id1-3,9以外の値",X
+valid_user@co.jp,password,CSVユーザー1,2000-01-01,24,1,登録可能,1

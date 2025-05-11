@@ -1,0 +1,3 @@
+user_id, password,user_name,birthday,age,gender,profile,department_id
+csv_user1@co.jp,password,CSVユーザー1,2000-01-01,24,1,CSVユーザー1のプロファイル,1
+csv_user2@co.jp,password,CSVユーザー2,1989-01-01,35,2,,2
