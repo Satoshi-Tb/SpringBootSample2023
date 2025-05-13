@@ -223,6 +223,8 @@ public class CSVServiceImpl implements CSVService{
     @Transactional(rollbackFor = Exception.class)
     private void processUser(MUser user) {
         logger.info("データ登録: {}", user);
+        // delete & insertによる入れ替え
+        mapper.deleteOne(user.getUserId());
 		mapper.insertOne(user);	
     }
     

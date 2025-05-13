@@ -65,6 +65,10 @@
       , profile
       , department_id
       , role
+      , ins_user_id
+      , ins_date
+      , upd_user_id
+   	  , upd_date
     )
     values (
         #{userId}
@@ -76,6 +80,10 @@
       , #{profile}
       , #{departmentId}
       , #{role}
+      , #{userId}
+      , CURRENT_TIMESTAMP()
+      , #{userId}
+      , CURRENT_TIMESTAMP()
     )
   </insert>
   
