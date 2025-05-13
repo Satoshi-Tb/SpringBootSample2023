@@ -92,7 +92,7 @@ public class CSVServiceImpl implements CSVService{
     /**
      * CSVをバリデーションしてMUserオブジェクトのリストに変換
      */
-    public List<CSVValidationResult> validateAndParseCSV(MultipartFile file) throws Exception {
+    private List<CSVValidationResult> validateAndParseCSV(MultipartFile file) throws Exception {
         List<CSVValidationResult> results = new ArrayList<>();
         
         try (BufferedReader fileReader = new BufferedReader(
