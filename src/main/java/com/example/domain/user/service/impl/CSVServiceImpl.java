@@ -42,7 +42,9 @@ public class CSVServiceImpl implements CSVService{
     
     private static final int CSV_ITEM_COUNT = 8;    
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    // yyyy/mm/dd or yyyy-mm-dd or yyyy.mm.dd or yyyymmddをOKとする
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+
     private static final Set<String> VALID_DEPARTMENT_IDS = Set.of("1", "2", "3", "9");
     private static final Set<String> VALID_GENDERS = Set.of("1", "2", "3");
 
@@ -102,6 +104,8 @@ public class CSVServiceImpl implements CSVService{
                      .setHeader()                          // 最初の行をヘッダーとして使用
                      .setSkipHeaderRecord(true)  // ヘッダー行をデータとして処理しない
                      .setIgnoreHeaderCase(true)  // ヘッダー名の大文字小文字を区別しない
+                     .setIgnoreEmptyLines(true)   // 空白行スキップ
+                     .setAllowMissingColumnNames(true) // 項目名が空白でも許可
                      .setTrim(true)                        // フィールドの前後の空白を削除
                      .build())) {
             
@@ -156,10 +160,10 @@ public class CSVServiceImpl implements CSVService{
                     validationResult.addError("birthday は必須です");
                 } else {
                     try {
-                        Date birthday = DATE_FORMAT.parse(birthdayStr);
+                        Date birthday = DATE_FORMAT.parse(birthdayStr.replaceAll("[-/\\.]", "")); // 区切り文字は -, /, .のいずれか
                         user.setBirthday(birthday);
                     } catch (ParseException e) {
-                        validationResult.addError(String.format("birthday は yyyy-MM-dd 形式で入力してください。入力値{%s}", birthdayStr));
+                        validationResult.addError(String.format("birthday は yyyy/MM/dd 形式で入力してください。入力値{%s}", birthdayStr));
                     }
                 }
                 
