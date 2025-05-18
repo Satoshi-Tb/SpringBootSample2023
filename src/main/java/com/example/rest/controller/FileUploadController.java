@@ -1,6 +1,5 @@
 package com.example.rest.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +22,16 @@ public class FileUploadController {
     private CSVService csvService;
 
     @PostMapping("/upload-csv")
-    public ResponseEntity<?> uploadCSVFile(@RequestParam("file") MultipartFile file) {
-        Map<String, Object> response = new HashMap<>();
-
+    public ResponseEntity<RestResponse<Object>> uploadCSVFile(@RequestParam("file") MultipartFile file) {
         // ファイルが空かチェック
         if (file.isEmpty()) {
-            response.put("status", "error");
-            response.put("message", "ファイルが空です");
-            return ResponseEntity.badRequest().body(response);
+            return RestResponse.createErrorResponse("9000", Map.of("message", "ファイルが空です"), HttpStatus.BAD_REQUEST);
         }
 
         // CSVファイルかチェック
         if (!file.getContentType().equals("text/csv") && 
             !file.getOriginalFilename().endsWith(".csv")) {
-            response.put("status", "error");
-            response.put("message", "CSVファイル形式のみアップロード可能です");
-            return ResponseEntity.badRequest().body(response);
+            return RestResponse.createErrorResponse("9000", Map.of("message", "CSVファイル形式のみアップロード可能です"), HttpStatus.BAD_REQUEST);
         }
 
         try {
@@ -46,18 +39,12 @@ public class FileUploadController {
             boolean result = csvService.processCSVFile(file);
             
             if (result) {
-                response.put("status", "success");
-                response.put("message", "ファイルが正常にアップロードされました");
-                return ResponseEntity.ok(response);
+                return RestResponse.createSuccessResponse();
             } else {
-                response.put("status", "error");
-                response.put("message", "ファイルの処理中にエラーが発生しました");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+                return RestResponse.createErrorResponse("9000", Map.of("message", "ファイルの処理中にエラーが発生しました"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
-            response.put("status", "error");
-            response.put("message", "エラー: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return RestResponse.createErrorResponse("9000", Map.of("message", "エラー: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

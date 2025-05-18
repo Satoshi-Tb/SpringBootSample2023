@@ -55,6 +55,32 @@ public class CSVServiceTest {
         assertThat(user2.getUserId()).isEqualTo("csv_user2@co.jp");
 	}
 
+	
+	@Test
+	@DisplayName("CSVService_異常_空ファイル")
+	void testProcessCSVFileEmptyFileError() throws Exception {
+		var csvFile = createMockCsvFile("sampleCsv1.csv", "com/example/domain/user/service/CSVService_error_empty.csv");
+        // テスト実行
+        boolean result = service.processCSVFile(csvFile);
+        
+        // 結果検証
+        assertThat(result).isFalse();
+	}
+
+	
+	
+	@Test
+	@DisplayName("CSVService_異常_明細エラーパタンテスト")
+	void testProcessCSVFileDetailErrorPattern() throws Exception {
+		var csvFile = createMockCsvFile("sampleCsv1.csv", "com/example/domain/user/service/CSVService_error_pattern.csv");
+        // テスト実行
+        boolean result = service.processCSVFile(csvFile);
+        
+        // 結果検証
+        assertThat(result).isFalse();
+	}
+
+	
     // 外部CSVファイルの読み込み
 	// resourcesフォルダ以下のパスを指定
 	private static MockMultipartFile createMockCsvFile(String mockCsvFileName, String resourcePath) throws IOException {
