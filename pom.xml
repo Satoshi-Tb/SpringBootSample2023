@@ -15,6 +15,7 @@
 	<description>書籍「後悔しないためのSpring Boot入門書：Spring 解体新書（第2版）」復習用</description>
 	<properties>
 		<java.version>17</java.version>
+		<h2.version>2.3.232</h2.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,6 +44,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -50,12 +52,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
 		<!-- jquery -->
 		<dependency>
 		    <groupId>org.webjars</groupId>
@@ -174,6 +170,24 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<!-- MyBatis Generator Plugin -->
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.4.1</version>
+				<configuration>
+					<configurationFile>src/main/resources/mbg-config.xml</configurationFile>
+					<verbose>true</verbose>
+					<overwrite>true</overwrite>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>${h2.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<!--  Mavenでテストを行うためのプラグイン -->
 			<plugin>

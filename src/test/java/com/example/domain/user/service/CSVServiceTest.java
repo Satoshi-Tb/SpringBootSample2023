@@ -15,6 +15,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.domain.model.mbg.MUserMbgExample;
+import com.example.repositry.mbg.MUserMbgMapper;
+
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Transactional // テスト終了後に自動的にロールバックされる
 @DisplayName("CSVServiceのテスト")
@@ -23,6 +26,9 @@ public class CSVServiceTest {
 	// テスト対象のサービス
 	@Autowired
 	private CSVService service;
+	
+	@Autowired
+	private MUserMbgMapper muserMpper;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -37,6 +43,16 @@ public class CSVServiceTest {
         
         // 結果検証
         assertThat(result).isTrue();
+        
+        var condition = new MUserMbgExample();
+        condition.setOrderByClause("user_id");
+        var results = muserMpper.selectByExample(condition);
+        
+        assertThat(results.size()).isEqualTo(2);
+        var user1 = results.get(0);
+        assertThat(user1.getUserId()).isEqualTo("csv_user1@co.jp");
+        var user2 = results.get(1);
+        assertThat(user2.getUserId()).isEqualTo("csv_user2@co.jp");
 	}
 
     // 外部CSVファイルの読み込み

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <context id="MyBatis3" targetRuntime="MyBatis3">
+    <commentGenerator>
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+
+    <!-- DB接続 -->
+<jdbcConnection driverClass="org.h2.Driver"
+                connectionURL="jdbc:h2:file:./testdb;DB_CLOSE_DELAY=-1"
+                userId="sa"
+                password=""/>
+    
+    <!-- モデル出力先 -->
+    <javaModelGenerator targetPackage="com.example.domain.model.mbg" targetProject="src/main/java"/>
+
+    <!-- Mapper XML出力先 -->
+    <sqlMapGenerator targetPackage="." targetProject="src/main/resources/mapper/h2/mbg"/>
+
+    <!-- Mapperインターフェース出力先 -->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.example.repositry.mbg"
+                         targetProject="src/main/java"/>
+
+    <!-- 
+    対象テーブル
+    object名は、既存のクラス名と重複を避けるため、末尾にMbgを指定しておく。
+    ※パッケージは別だったとしても、同名にすると上手く動作しなかった。ビルドは通るが、アプリ実行でエラーになる
+     -->
+    <table tableName="m_user" domainObjectName="MUserMbg"/>
+  </context>
+</generatorConfiguration>
