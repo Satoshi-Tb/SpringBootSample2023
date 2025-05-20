@@ -284,6 +284,22 @@
       user_id = #{userId}
   </update>
 
+  <update id="updateByUserSelectiveTest">
+    update
+      m_user
+    <set>
+		<if test="userName != null">
+        	USER_NAME = #{userName},
+      	</if>
+        <if test="gender != null">
+        	GENDER = #{gender},
+      	</if>
+    </set>
+    where
+      user_id = #{userId}
+  </update>
+
+
   <!-- ユーザー1件更新 パラメータModel版 -->
   <update id="updateByUser">
     update

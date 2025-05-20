@@ -50,7 +50,6 @@ public interface UserMapper {
 
     /** ユーザー更新(1件) */
     public void updateByUser(MUser user);
-
     
     /** ユーザー削除(1件) */
     public int deleteOne(@Param("userId") String userId);
@@ -61,4 +60,9 @@ public interface UserMapper {
     /** 複数ユーザー削除(UNION ALL版) */
     public int deleteUsersByUnionClause(List<String> userIds);
 
+	/** ユーザー更新（1件）引数違いテスト */
+	public void updateByUserSelectiveTest(String userId, String userName);
+
+	/** ユーザー更新（1件）引数違いテスト */
+	public void updateByUserSelectiveTest(String userId, String userName, Integer gender);
 }

@@ -119,4 +119,15 @@ public class UserServiceImpl implements UserService {
 	public String getBeforeUserId(String userId) {
 		return mapper.findBeforeUserId(userId);
 	}
+	@Override
+	public void updateUserTest(String userId, String userName) {
+		mapper.updateByUserSelectiveTest(userId, userName);
+	};
+
+	/** ユーザー更新（1件）引数違いテスト */
+	@Override
+	public void updateUserTest(String userId, String userName, Integer gender) {
+		mapper.updateByUserSelectiveTest(userId, userName, gender);
+	}
+	
 }

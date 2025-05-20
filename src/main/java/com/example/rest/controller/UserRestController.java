@@ -138,5 +138,27 @@ public class UserRestController {
 		// エラーテスト用のレスポンス
 		//return RestResponse.createErrorResponse("9999", null, HttpStatus.BAD_REQUEST);
 	}
+	
+	// 引数違いのメソッド呼び出しテスト。MyBatisのマッパーで利用している引数欠落の場合、NGになる。
+	@PutMapping("/update-test1")  // Putメソッドにマップ
+	public ResponseEntity<RestResponse<MUser>> updateUserTest1(@RequestBody UserRequest req) {
+		// ユーザーを更新
+		userService.updateUserTest(req.getUserId(), req.getUserName());
+		
+		// ユーザーを1件取得
+		var resp = userService.getUserOne(req.getUserId());
+		
+		return RestResponse.createSuccessResponse(resp);
+	}
 
+	@PutMapping("/update-test2")  // Putメソッドにマップ
+	public ResponseEntity<RestResponse<MUser>> updateUserTest2(@RequestBody UserRequest req) {
+		// ユーザーを更新
+		userService.updateUserTest(req.getUserId(), req.getUserName(), req.getGender());
+		
+		// ユーザーを1件取得
+		var resp = userService.getUserOne(req.getUserId());
+		
+		return RestResponse.createSuccessResponse(resp);
+	}
 }
