@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="serviceName" source="spring.application.name" defaultValue="spring-boot-sample-2023" />
+
+    <appender name="ECS_JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="co.elastic.logging.logback.EcsEncoder">
+            <serviceName>${serviceName}</serviceName>
+        </encoder>
+    </appender>
+
+    <appender name="ACCESS_JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="ACCESS_JSON" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS_JSON_CONSOLE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ECS_JSON_CONSOLE" />
+    </root>
+</configuration>
