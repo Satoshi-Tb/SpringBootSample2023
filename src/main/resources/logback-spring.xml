@@ -2,22 +2,26 @@
 <configuration>
     <springProperty scope="context" name="serviceName" source="spring.application.name" defaultValue="spring-boot-sample-2023" />
 
+    <!-- 通常ログは Elastic で扱いやすい ECS JSON 形式で標準出力へ流す。 -->
     <appender name="ECS_JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="co.elastic.logging.logback.EcsEncoder">
             <serviceName>${serviceName}</serviceName>
         </encoder>
     </appender>
 
+    <!-- アクセスログは Filter 側で JSON を完成させているため、そのまま 1 行出力する。 -->
     <appender name="ACCESS_JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
     </appender>
 
+    <!-- ACCESS_JSON ロガーだけを分離し、通常ログのエンコード設定を二重適用しない。 -->
     <logger name="ACCESS_JSON" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_JSON_CONSOLE" />
     </logger>
 
+    <!-- アプリ全体の標準ログは root で ECS appender に集約する。 -->
     <root level="INFO">
         <appender-ref ref="ECS_JSON_CONSOLE" />
     </root>

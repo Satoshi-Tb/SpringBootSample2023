@@ -49,6 +49,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = getRequestPath(request);
+        // PoC では API アクセスだけを観測対象にする。
         return !path.equals("/api") && !path.startsWith("/api/");
     }
 
@@ -65,6 +66,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        // wall clock は event.start/end 用、monotonic clock は duration 計測用に分ける。
         Instant start = Instant.now();
         long startNanos = System.nanoTime();
         Throwable failure = null;
@@ -75,6 +77,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
             failure = ex;
             rethrow(ex);
         } finally {
+            // 正常系・例外系を問わず 1 リクエスト 1 イベントを残す。
             Instant end = Instant.now();
             long durationNanos = System.nanoTime() - startNanos;
             writeAccessLog(request, response, start, end, durationNanos, failure);
@@ -88,6 +91,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
             Instant end,
             long durationNanos,
             Throwable failure) {
+        // Elastic Discover / Lens でそのまま扱いやすい ECS 寄りの JSON を組み立てる。
         Map<String, Object> event = new LinkedHashMap<>();
         event.put("@timestamp", end.toString());
         event.put("service", Map.of("name", serviceName));
@@ -129,6 +133,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
 
     private int resolveStatusCode(HttpServletResponse response, Throwable failure) {
         int status = response.getStatus();
+        // 例外送出後にレスポンスへ明示設定されていない場合でも 5xx として記録する。
         if (failure != null && status < 400) {
             return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
         }
@@ -137,10 +142,12 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
 
     private String resolveEndpoint(HttpServletRequest request) {
         Object bestMatchingPattern = request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+        // Spring MVC が解決したルートパターンを優先すると、集計軸が実装上の URL 定義と揃う。
         if (bestMatchingPattern instanceof String pattern && !pattern.isBlank()) {
             return pattern;
         }
 
+        // フォールバックでは可変セグメントを潰して集計粒度を荒らさないようにする。
         String path = getRequestPath(request);
         path = UUID_SEGMENT.matcher(path).replaceAll("/{id}");
         path = NUMERIC_SEGMENT.matcher(path).replaceAll("/{id}");
