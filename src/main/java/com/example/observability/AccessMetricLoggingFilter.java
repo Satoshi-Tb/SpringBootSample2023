@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +30,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AccessMetricLoggingFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccessMetricLoggingFilter.class);
     private static final Logger ACCESS_LOG = LoggerFactory.getLogger("ACCESS_JSON");
-    private static final Pattern NUMERIC_SEGMENT = Pattern.compile("/\\d+(?=/|$)");
-    private static final Pattern UUID_SEGMENT = Pattern.compile(
-            "/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}(?=/|$)");
-    private static final Pattern EMAIL_SEGMENT = Pattern.compile("/[^/]+@[^/]+(?=/|$)");
 
     private final ObjectMapper objectMapper;
     private final String serviceName;
@@ -147,12 +142,8 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
             return pattern;
         }
 
-        // フォールバックでは可変セグメントを潰して集計粒度を荒らさないようにする。
-        String path = getRequestPath(request);
-        path = UUID_SEGMENT.matcher(path).replaceAll("/{id}");
-        path = NUMERIC_SEGMENT.matcher(path).replaceAll("/{id}");
-        path = EMAIL_SEGMENT.matcher(path).replaceAll("/{id}");
-        return path;
+        // MVC で解決できなかったケースは、生の request path をそのまま残す。
+        return getRequestPath(request);
     }
 
     private String resolveUserId() {
