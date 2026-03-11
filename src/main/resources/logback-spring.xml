@@ -16,9 +16,19 @@
         </encoder>
     </appender>
 
+    <!-- Agent が確実に回収できるよう、アクセスログは共有 volume にも同内容を書き出す。 -->
+    <appender name="ACCESS_JSON_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/spring-app/access.log</file>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- ACCESS_JSON ロガーだけを分離し、通常ログのエンコード設定を二重適用しない。 -->
     <logger name="ACCESS_JSON" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_JSON_CONSOLE" />
+        <appender-ref ref="ACCESS_JSON_FILE" />
     </logger>
 
     <!-- アプリ全体の標準ログは root で ECS appender に集約する。 -->

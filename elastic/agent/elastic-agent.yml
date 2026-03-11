@@ -1,34 +1,23 @@
+agent.monitoring.enabled: false
+
 outputs:
   default:
     type: elasticsearch
     hosts:
       - http://elasticsearch:9200
 
-providers:
-  docker:
-    host: unix:///var/run/docker.sock
-
 inputs:
-  - id: docker-container-logs-${docker.container.id}
+  - id: spring-app-access-logs
     type: filestream
     use_output: default
     data_stream.namespace: default
-    condition: ${docker.container.name} == "spring-app"
     streams:
-      - id: docker-container-logs-stream-${docker.container.id}
+      - id: spring-app-access-logs-stream
         data_stream.dataset: custom.spring_app
         paths:
-          - /var/lib/docker/containers/${docker.container.id}/*-json.log
+          - /var/log/spring-app/access.log
         parsers:
-          - container: ~
-        processors:
-          - decode_json_fields:
-              fields: ["message"]
+          - ndjson:
               target: ""
               overwrite_keys: true
               add_error_key: true
-          - drop_event:
-              when:
-                not:
-                  equals:
-                    event.dataset: "spring-boot-sample-2023.access"

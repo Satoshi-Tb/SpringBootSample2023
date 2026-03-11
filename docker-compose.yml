@@ -44,6 +44,8 @@ services:
       retries: 10
       start_period: 60s
     restart: unless-stopped
+    volumes:
+      - spring-app-logs:/var/log/spring-app
     networks:
       - observability
 
@@ -108,10 +110,9 @@ services:
       spring-app:
         condition: service_healthy
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - ./elastic/agent/elastic-agent.yml:/usr/share/elastic-agent/elastic-agent.yml:ro
       - elastic-agent-state:/usr/share/elastic-agent/state
+      - spring-app-logs:/var/log/spring-app:ro
     restart: unless-stopped
     networks:
       - observability
@@ -119,6 +120,7 @@ services:
 volumes:
   elasticsearch-data:
   elastic-agent-state:
+  spring-app-logs:
 
 networks:
   observability:
