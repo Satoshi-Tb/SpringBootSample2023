@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("AccessMetricLoggingFilter テスト")
 class AccessMetricLoggingFilterTest {
+    private static final String ACCESS_LOG_DATASET = "custom.spring_app";
+    private static final String APP_ACCESS_LOG_DATASET = "spring-boot-sample-2023.access";
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -39,10 +41,11 @@ class AccessMetricLoggingFilterTest {
         JsonNode accessLog = findAccessLog(output, "/api/department/all");
         assertThat(accessLog).isNotNull();
         assertThat(accessLog.path("service").path("name").asText()).isEqualTo("spring-boot-sample-2023");
-        assertThat(accessLog.path("event").path("dataset").asText()).isEqualTo("spring-boot-sample-2023.access");
+        assertThat(accessLog.path("event").path("dataset").asText()).isEqualTo(ACCESS_LOG_DATASET);
         assertThat(accessLog.path("http").path("request").path("method").asText()).isEqualTo("GET");
         assertThat(accessLog.path("http").path("response").path("status_code").asInt()).isEqualTo(200);
         assertThat(accessLog.path("labels").path("endpoint").asText()).isEqualTo("/api/department/all");
+        assertThat(accessLog.path("custom").path("app_event_dataset").asText()).isEqualTo(APP_ACCESS_LOG_DATASET);
         assertThat(accessLog.path("custom").path("duration_ms").isNumber()).isTrue();
         assertThat(accessLog.path("user").path("id").asText()).isEqualTo("anonymous");
     }
@@ -60,7 +63,8 @@ class AccessMetricLoggingFilterTest {
         return Arrays.stream(output.getOut().split("\\R"))
                 .map(this::readJson)
                 .filter(node -> node != null)
-                .filter(node -> "spring-boot-sample-2023.access".equals(node.path("event").path("dataset").asText()))
+                .filter(node -> ACCESS_LOG_DATASET.equals(node.path("event").path("dataset").asText()))
+                .filter(node -> APP_ACCESS_LOG_DATASET.equals(node.path("custom").path("app_event_dataset").asText()))
                 .filter(node -> path.equals(node.path("url").path("path").asText()))
                 .findFirst()
                 .orElse(null);

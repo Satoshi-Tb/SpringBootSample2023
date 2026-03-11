@@ -30,6 +30,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AccessMetricLoggingFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccessMetricLoggingFilter.class);
     private static final Logger ACCESS_LOG = LoggerFactory.getLogger("ACCESS_JSON");
+    private static final String ACCESS_LOG_DATASET = "custom.spring_app";
+    private static final String APP_ACCESS_LOG_DATASET_SUFFIX = ".access";
 
     private final ObjectMapper objectMapper;
     private final String serviceName;
@@ -106,7 +108,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
 
     private Map<String, Object> createEvent(Instant start, Instant end, long durationNanos) {
         Map<String, Object> event = new LinkedHashMap<>();
-        event.put("dataset", serviceName + ".access");
+        event.put("dataset", ACCESS_LOG_DATASET);
         event.put("start", start.toString());
         event.put("end", end.toString());
         event.put("duration", durationNanos);
@@ -128,6 +130,7 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
 
     private Map<String, Object> createCustom(long durationNanos) {
         Map<String, Object> custom = new LinkedHashMap<>();
+        custom.put("app_event_dataset", serviceName + APP_ACCESS_LOG_DATASET_SUFFIX);
         custom.put("duration_ms", durationNanos / 1_000_000L);
         return custom;
     }
