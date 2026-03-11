@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <springProperty scope="context" name="serviceName" source="spring.application.name" defaultValue="spring-boot-sample-2023" />
+    <property name="accessLogPath" value="${ACCESS_LOG_PATH:-/var/log/spring-app/access.log}" />
 
     <!-- 通常ログは Elastic で扱いやすい ECS JSON 形式で標準出力へ流す。 -->
     <appender name="ECS_JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -18,7 +19,7 @@
 
     <!-- Agent が確実に回収できるよう、アクセスログは共有 volume にも同内容を書き出す。 -->
     <appender name="ACCESS_JSON_FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/var/log/spring-app/access.log</file>
+        <file>${accessLogPath}</file>
         <append>true</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
