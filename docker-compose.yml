@@ -110,6 +110,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./elastic/agent/elastic-agent.yml:/usr/share/elastic-agent/elastic-agent.yml:ro
       - elastic-agent-state:/usr/share/elastic-agent/state
     restart: unless-stopped
     networks:
