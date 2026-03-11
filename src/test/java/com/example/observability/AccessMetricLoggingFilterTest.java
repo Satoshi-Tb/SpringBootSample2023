@@ -43,7 +43,7 @@ class AccessMetricLoggingFilterTest {
         assertThat(accessLog.path("http").path("request").path("method").asText()).isEqualTo("GET");
         assertThat(accessLog.path("http").path("response").path("status_code").asInt()).isEqualTo(200);
         assertThat(accessLog.path("labels").path("endpoint").asText()).isEqualTo("/api/department/all");
-        assertThat(accessLog.path("labels").path("duration_ms").isNumber()).isTrue();
+        assertThat(accessLog.path("custom").path("duration_ms").isNumber()).isTrue();
         assertThat(accessLog.path("user").path("id").asText()).isEqualTo("anonymous");
     }
 

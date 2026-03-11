@@ -94,7 +94,8 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
         event.put("http", createHttp(request, response, failure));
         event.put("url", Map.of("path", getRequestPath(request)));
         event.put("user", Map.of("id", resolveUserId()));
-        event.put("labels", createLabels(request, durationNanos));
+        event.put("custom", createCustom(durationNanos));
+        event.put("labels", createLabels(request));
 
         try {
             ACCESS_LOG.info(objectMapper.writeValueAsString(event));
@@ -119,11 +120,16 @@ public class AccessMetricLoggingFilter extends OncePerRequestFilter {
         return http;
     }
 
-    private Map<String, Object> createLabels(HttpServletRequest request, long durationNanos) {
+    private Map<String, Object> createLabels(HttpServletRequest request) {
         Map<String, Object> labels = new LinkedHashMap<>();
         labels.put("endpoint", resolveEndpoint(request));
-        labels.put("duration_ms", durationNanos / 1_000_000L);
         return labels;
+    }
+
+    private Map<String, Object> createCustom(long durationNanos) {
+        Map<String, Object> custom = new LinkedHashMap<>();
+        custom.put("duration_ms", durationNanos / 1_000_000L);
+        return custom;
     }
 
     private int resolveStatusCode(HttpServletResponse response, Throwable failure) {
